@@ -23,8 +23,6 @@ const useStyles = makeStyles(theme => ({
 const Login = () => {
     const classes = useStyles()
     const localEnv = process.env.REACT_APP_DEV_CALLBACK
-    const herokuEnv = process.env
-    console.log(herokuEnv)
     let redirectUrl = ""
     if (localEnv) {
         redirectUrl = localEnv
