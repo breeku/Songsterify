@@ -22,12 +22,14 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
     const classes = useStyles()
-    const env = process.env.REACT_APP_DEV_CALLBACK
+    const localEnv = process.env.REACT_APP_DEV_CALLBACK
+    const herokuEnv = process.env
+    console.log(herokuEnv)
     let redirectUrl = ""
-    if (env) {
-        redirectUrl = env
+    if (localEnv) {
+        redirectUrl = localEnv
     } else {
-        redirectUrl = "https://songsterrify.herokuapp.com/callback/"
+        redirectUrl = "https://songsterify.herokuapp.com/callback/"
     }
     const scopes = "&scope=user-read-recently-played%20user-top-read"
     const authUrl =
