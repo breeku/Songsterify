@@ -7,14 +7,17 @@ import {
 } from "react-router-dom"
 import { connect } from "react-redux"
 
-import Main from "./components/Main"
+import Main from "./components/Home/Home"
 import Callback from "./components/Callback"
 import Login from "./components/Login"
 import Tracks from "./components/Playlist/Playlist"
 import Appbar from "./components/Appbar/Appbar"
+import Warning from "./components/Snackbars/Warning"
+import About from "./components/About/About"
 
-import { setTokens } from "./reducers/authReducer"
-import { CircularProgress } from "@material-ui/core"
+import { getRecentAlbums } from "./reducers/albumReducer"
+import { setToken } from "./reducers/authReducer"
+import { initializePlaylists } from "./reducers/playlistReducer"
 
 const routes = [
     {
@@ -33,35 +36,56 @@ const routes = [
     },
     {
         path: "/playlist/:id",
-        main: () => <Tracks />
+        main: () => <Tracks playlist />
+    },
+    {
+        path: "/album/:id",
+        main: () => <Tracks album />
+    },
+    {
+        path: "/about/",
+        exact: true,
+        main: () => <About/>
     }
 ]
 
 const App = props => {
+    const {
+        tokens,
+        setToken,
+        getRecentAlbums,
+        albums,
+        initializePlaylists,
+        playlists
+    } = props
+
     useEffect(() => {
-        if (!props.tokens) {
-            const tokenJSON = window.localStorage.getItem("SongsterrifyTokens")
-            if (tokenJSON) {
-                props.setTokens(JSON.parse(tokenJSON))
-            } else {
-                props.setTokens({
-                    accessToken: null,
-                    refreshToken: null
-                })
-            }
+        if (!tokens) {
+            setToken()
         }
-    }, [props, props.tokens])
+    }, [setToken, tokens])
+
+    useEffect(() => {
+        if (tokens && tokens.accessToken && !albums) {
+            getRecentAlbums({ accessToken: tokens.accessToken })
+        }
+    }, [albums, getRecentAlbums, tokens])
+
+    useEffect(() => {
+        if (tokens && tokens.accessToken && !playlists) {
+            initializePlaylists(tokens)
+        }
+    }, [initializePlaylists, playlists, tokens])
 
     const TokenRouting = () => {
-        if (props.tokens) {
-            if (props.tokens.accessToken || props.tokens.refreshToken) {
-                // accesstoken changes when refreshing token
-                return <Redirect to="/" />
+        if (tokens) {
+            if (tokens.accessToken) {
+                return null
             } else {
                 return <Redirect to="/login" />
             }
         }
-        return <CircularProgress />
+        return null
     }
 
     return (
@@ -69,6 +93,7 @@ const App = props => {
             <Router>
                 <TokenRouting />
                 <Appbar />
+                <Warning />
                 <Switch>
                     {routes.map((route, index) => (
                         <Route
@@ -87,11 +112,12 @@ const App = props => {
 const mapStateToProps = state => {
     return {
         tokens: state.tokens,
-        playlists: state.playlists
+        playlists: state.playlists,
+        recent: state.recent
     }
 }
 
-const mapDispatchToProps = { setTokens }
+const mapDispatchToProps = { setToken, getRecentAlbums, initializePlaylists }
 
 const ConnectedApp = connect(
     mapStateToProps,

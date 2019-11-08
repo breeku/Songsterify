@@ -10,7 +10,6 @@ import TableRow from "@material-ui/core/TableRow"
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogTitle from "@material-ui/core/DialogTitle"
-import List from "@material-ui/core/List"
 import Button from "@material-ui/core/Button"
 import { withStyles } from "@material-ui/core/styles"
 
@@ -57,8 +56,8 @@ const millisToMinutesAndSeconds = (millis) => {
 }
 
 const TrackTable = props => {
-    const { classes } = props
-    const album = props.tracks.album
+    const { classes, playlist } = props
+    const { album } = props.tracks
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState(null)
     const [tabs, setTabs] = useState(null)
@@ -100,7 +99,6 @@ const TrackTable = props => {
         setOpen(false)
         setTab(null)
     }
-
     return (
         <React.Fragment>
             <Table className={classes.root}>
@@ -113,9 +111,6 @@ const TrackTable = props => {
                         </TableCell>
                         <TableCell className={classes.text} align="right">
                             Album
-                        </TableCell>
-                        <TableCell className={classes.text} align="right">
-                            Date added
                         </TableCell>
                         <TableCell className={classes.text} align="right">
                             Length
@@ -162,20 +157,14 @@ const TrackTable = props => {
                                             className={classes.a}
                                             to={{
                                                 pathname:
-                                                    "/playlist/" +
+                                                    "/album/" +
                                                     track.album.id,
                                                 state: { album: track.album }
                                             }}
                                         >
                                             {track.album.name}
                                         </Link>
-                                    ) : null}
-                                </TableCell>
-                                <TableCell
-                                    align="right"
-                                    className={classes.text}
-                                >
-                                    {track.added_at}
+                                    ) : <React.Fragment>{playlist.name}</React.Fragment>}
                                 </TableCell>
                                 <TableCell
                                     align="right"
@@ -222,8 +211,8 @@ const TrackTable = props => {
                         >
                             Open
                         </Button>
-                        {tab.tab.tracks.map(track => (
-                            <React.Fragment key={track.views}>
+                        {tab.tab.tracks.map((track, index) => (
+                            <React.Fragment key={index}>
                                 <Tab tab={track} />
                             </React.Fragment>
                         ))}

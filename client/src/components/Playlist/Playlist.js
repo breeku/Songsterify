@@ -15,7 +15,8 @@ import {
     getTracks,
     getAlbum
 } from "../../reducers/trackReducer"
-import { refreshToken } from "../../reducers/authReducer"
+
+import { setAlbums } from "../../reducers/albumReducer"
 
 const styles = theme => ({
     root: {
@@ -29,7 +30,7 @@ const styles = theme => ({
     toolbar: theme.mixins.toolbar
 })
 
-const getBackgroundColor = async img => {
+const getBackgroundColor = async img => { // https://github.com/idanlo/react-spotify/blob/master/src/Components/PlaylistView/PlaylistView.jsx
     const palette = await Vibrant.from(img).getPalette()
     let rgb = palette.DarkMuted._rgb.join(", ")
     let color = "rgb(" + rgb + ")"
@@ -38,81 +39,67 @@ const getBackgroundColor = async img => {
 }
 
 const Playlist = props => {
-    const id = props.location.pathname.slice(10)
     const [playlist, setPlaylist] = useState(null)
     const [bg, setBackground] = useState(
-        "linear-gradient(rgb(58, 91, 95), rgb(6, 9, 10) 85%)"
+        "linear-gradient(rgb(56, 64, 103), rgb(6, 9, 10) 85%)"
     )
-    const { classes } = props
-    const { tokens } = props
-    const { location } = props
-    const { playlists } = props
-    const { tracks } = props
-    const { refreshToken } = props
-    const { getAlbum } = props
-    const { getTracks } = props
-    const { setBg } = props
-
-    useEffect(() => {
-        if (
-            tokens &&
-            tokens.accessToken &&
-            tokens.refreshToken &&
-            location.state &&
-            location.state.album &&
-            tracks &&
-            !tracks[id]
-        ) {
-            getAlbum({
-                id,
-                accessToken: tokens.accessToken,
-                refreshToken: tokens.refreshToken
-            })
-        } else if (
-            (tokens &&
-                tokens.accessToken &&
-                tokens.refreshToken &&
-                playlists &&
-                !tracks) ||
-            (tokens &&
-                tokens.accessToken &&
-                tokens.refreshToken &&
-                tracks &&
-                !tracks[id])
-        ) {
-            getTracks({
-                id,
-                accessToken: tokens.accessToken,
-                refreshToken: tokens.refreshToken
-            })
-        }
-    }, [getAlbum, getTracks, id, location.state, playlists, tokens, tracks])
-
-    useEffect(() => {
-        if (tracks && tracks[id]) {
-            if (
-                tracks[id].refreshedToken &&
-                tokens.accessToken !== tracks[id].refreshedToken
-            ) {
-                refreshToken(tracks[id].refreshedToken)
-            }
-            if (tracks[id] && tracks[id].bg) {
-                setBackground(tracks[id].bg)
-            }
-        }
-        if (playlists && !location.state) {
-            setPlaylist(playlists.playlists.items.find(x => x.id === id))
-        } else if (location.state) {
-            setPlaylist(location.state.album)
-        }
-    }, [
-        tracks,
-        id,
-        playlists,
-        location.state,
+    const {
+        classes,
         tokens,
-        refreshToken
-    ]) // not optimal, need to include id for "offline" and tracks for online
+        location,
+        playlists,
+        tracks,
+        albums,
+        getAlbum,
+        getTracks,
+        setBg
+    } = props
+    const playlistType = props.playlist ? "playlist" : "album"
+
+    let id = ""
+    if (playlistType === "playlist") {
+        id = location.pathname.slice(10)
+    } else if (playlistType === "album") {
+        id = location.pathname.slice(7)
+    }
+
+    useEffect(() => {
+        if (tokens && tokens.accessToken) {
+            if (playlistType === "album") {
+                if (!tracks || (tracks && !tracks[id])) {
+                    getAlbum({
+                        id,
+                        accessToken: tokens.accessToken
+                    })
+                }
+            } else if (playlistType === "playlist") {
+                if (!tracks || (tracks && !tracks[id])) {
+                    getTracks({
+                        id,
+                        accessToken: tokens.accessToken
+                    })
+                }
+            }
+        }
+    }, [getAlbum, getTracks, id, playlistType, tokens, tracks])
+
+    useEffect(() => {
+        if (tracks && tracks[id] && tracks[id].bg) {
+            setBackground(tracks[id].bg)
+        }
+    }, [id, tracks])
+
+    useEffect(() => {
+        if (playlists && playlistType === "playlist") { // linked from playlistlist
+            setPlaylist(playlists.playlists.items.find(x => x.id === id))
+        } else if (albums && albums.recent && playlistType === "album" && !location.state) { // linked from recent albums
+            setPlaylist(albums.recent[id])
+        } else if (location && location.state && playlistType === "album") { // linked from tracktable link
+            setPlaylist(location.state.album)
+        } else { // linked from /browse/ or refreshed page of a album which does not exist in recent
+            // fetch
+        }
+    }, [playlists, playlistType, id, albums, location])
 
     useEffect(() => {
         const setBackgroundColor = async () => {
@@ -126,11 +113,6 @@ const Playlist = props => {
         }
     }, [id, playlist, setBg, tracks])
 
-    useEffect(() => {
-        return () => {
-        }
-    }, [])
-
     return (
         <div
             className={classes.root}
@@ -141,13 +123,20 @@ const Playlist = props => {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <div>
-                    {playlist && playlist.id === id && tracks && tracks[id] && bg ? (
+                    {playlist &&
+                    playlist.id === id &&
+                    tracks &&
+                    tracks[id] &&
+                    bg ? (
                         <React.Fragment>
                             <PlaylistInfo
                                 playlist={playlist}
                                 tracks={tracks[id]}
                             />
-                            <TrackTable tracks={tracks[id]} />
+                            <TrackTable
+                                playlist={playlist}
+                                tracks={tracks[id]}
+                            />
                         </React.Fragment>
                     ) : (
                         <SkeletonPlaylist />
@@ -162,13 +151,14 @@ const mapStateToProps = state => {
     return {
         playlists: state.playlists,
         tracks: state.tracks,
-        tokens: state.tokens
+        tokens: state.tokens,
+        albums: state.albums
     }
 }
 
 const ConnectedPlaylists = connect(
     mapStateToProps,
-    { clearTracks, getTracks, refreshToken, setBg, getAlbum }
+    { clearTracks, getTracks, setBg, getAlbum, setAlbums }
 )(Playlist)
 
 export default withRouter(withStyles(styles)(ConnectedPlaylists))

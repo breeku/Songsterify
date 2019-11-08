@@ -2,22 +2,28 @@ const Sentry = require('../sentry');
 const authRouter = require("express").Router()
 const spotifyApi = require('../spotifySetup')
 
-authRouter.post("/", async (req, res) => {
+authRouter.post("/login", async (req, res) => {
     try {
         let code = req.body.code
         const codeGrant = await spotifyApi.authorizationCodeGrant(code)
+        
+        res.cookie('accessToken', codeGrant.body["access_token"])
+        res.cookie('refreshToken', codeGrant.body["refresh_token"], {httpOnly: true})
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e)
+        Sentry.captureException(e);
+        res.sendStatus(500)
+    }
+})
 
-        console.log("The token expires in " + codeGrant.body["expires_in"])
-        console.log("The access token is " + codeGrant.body["access_token"])
-        console.log("The refresh token is " + codeGrant.body["refresh_token"])
-
-        const tokenInfo = {
-            tokenExpires: codeGrant.body["expires_in"],
-            accessToken: codeGrant.body["access_token"],
-            refreshToken:  codeGrant.body["refresh_token"]
-        }
-
-        res.send(tokenInfo)
+authRouter.post("/refresh", async (req, res) => {
+    try {
+        const refreshToken = req.cookies.refreshToken
+        await spotifyApi.setRefreshToken(refreshToken)
+        const refreshedToken = await spotifyApi.refreshAccessToken()
+        res.cookie('accessToken', refreshedToken.body["access_token"])
+        res.sendStatus(201)
     } catch (e) {
         console.log(e)
         Sentry.captureException(e);

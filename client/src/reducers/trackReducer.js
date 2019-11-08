@@ -14,8 +14,6 @@ const trackReducer = (state = null, action) => {
         const prevTracks = state[action.id]
         const newTracks = {...prevTracks, tabs: action.data}
         return {...state, [action.id]: newTracks}
-    } else if (action.type === "GET_RECENT") {
-        return {...state, recent: action.data}
     } else {
         return state
     }
@@ -49,13 +47,6 @@ export const clearTracks = () => {
 export const setBg = obj => {
     return async dispatch => {
         dispatch({ type: "SET_BG", bg: obj.bg, id: obj.id})
-    }
-}
-
-export const getRecentTracks = obj => {
-    return async dispatch => {
-        const tracks = await spotifyService.getRecentTracks(obj)
-        dispatch({ type: "GET_RECENT", data: tracks})
     }
 }
 

@@ -1,10 +1,9 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import auth from "../services/auth"
-import CircularProgress from "@material-ui/core/CircularProgress"
 import { withRouter } from "react-router-dom"
 
 import { connect } from "react-redux"
-import { setTokens } from "../reducers/authReducer"
+import { setToken } from "../reducers/authReducer"
 
 const Callback = props => {
     const code = props.location.search.slice(6)
@@ -12,16 +11,8 @@ const Callback = props => {
     useEffect(() => {
         const getToken = async () => {
             try {
-                const response = await auth.login(code)
-                let accToken = response.accessToken
-                let refToken = response.refreshToken
-
-                const tokens = {
-                    accessToken: accToken,
-                    refreshToken: refToken
-                }
-
-                props.setTokens(tokens)
+                await auth.login(code)
+                props.setToken()
             } catch (e) {
                 console.log(e)
             }
@@ -31,15 +22,13 @@ const Callback = props => {
     }, [code])
 
     return (
-        <React.Fragment>
-            <CircularProgress />
-        </React.Fragment>
+        null
     )
 }
 
 export default withRouter(
     connect(
         null,
-        { setTokens }
+        { setToken }
     )(Callback)
 )

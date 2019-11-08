@@ -3,7 +3,7 @@ import React from "react"
 import Grid from "@material-ui/core/Grid"
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const SkeletonRecentTracks = () => {
+const SkeletonRecentAlbums = () => {
     return (
         <div style={{width: "100%"}}>
             <Skeleton width={300} height={40} component="h1" style={{display: "block", marginLeft: "auto", marginRight: "auto", marginTop: 18.7, marginBottom: 18.7}}/>
@@ -37,4 +37,4 @@ const SkeletonRecentTracks = () => {
     )
 }
 
-export default SkeletonRecentTracks
+export default SkeletonRecentAlbums

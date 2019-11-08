@@ -3,11 +3,12 @@ const express = require("express")
 const cors = require("cors")
 const bodyParser = require("body-parser")
 const rateLimit = require("express-rate-limit")
-const app = express()
+const cookieParser = require("cookie-parser")
 const authRouter = require("./server/routes/auth")
 const spotifyRouter = require("./server/routes/spotify")
 const songsterrRouter = require("./server/routes/songsterr")
 const path = require("path")
+const app = express()
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -26,6 +27,7 @@ app.use(
         parameterLimit: 50000
     })
 )
+app.use(cookieParser())
 
 app.use("/api/auth", authRouter)
 app.use("/api/spotify", spotifyRouter)

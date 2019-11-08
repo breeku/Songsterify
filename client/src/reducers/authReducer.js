@@ -1,47 +1,38 @@
+import Cookies from 'js-cookie'
+
 const authReducer = (state = null, action) => {
-    if (action.type === "SET_TOKENS") {
-        if (action.data.accessToken && action.data.refreshToken) {
-            window.localStorage.setItem(
-                "SongsterrifyTokens",
-                JSON.stringify({
-                    accessToken: action.data.accessToken,
-                    refreshToken: action.data.refreshToken
-                })
-            )
-        }
+    if (action.type === "SET_TOKEN") {
         return action.data
     } else if (action.type === "REFRESH_TOKEN") {
-        window.localStorage.setItem(
-            'SongsterrifyTokens', JSON.stringify({
-                accessToken: action.data,
-                refreshToken: state.refreshToken
-            })
-        )
-        return {...state, accessToken: action.data}
+        return action.data
     } else {
         return state
     }
 }
 
-export const setTokens = tokens => {
-    if (tokens) {
+export const setToken = () => {
         return async dispatch => {
-            dispatch({
-                type: "SET_TOKENS",
-                data: tokens
-            })
+            const accessToken = Cookies.get('accessToken')
+            if (accessToken) {
+                dispatch({
+                    type: "SET_TOKEN",
+                    data: {accessToken}
+                })
+            } else {
+                dispatch({
+                    type: "SET_TOKEN",
+                    data: {accessToken: null}
+                })
+            }
         }
-    }
 }
 
 export const refreshToken = token => {
-    if (token) {
-        return async dispatch => {
-            dispatch({
-                type: "REFRESH_TOKEN",
-                data: token
-            })
-        }
+    return async dispatch => {
+        dispatch({
+            type: "REFRESH_TOKEN",
+            data: {accessToken: token}
+        })
     }
 }
 

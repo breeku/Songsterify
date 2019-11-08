@@ -7,9 +7,8 @@ import Button from "@material-ui/core/Button"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Box from "@material-ui/core/Box"
 
-import Warning from "./Snackbars/Warning"
-
 import { getTabs } from "../../reducers/trackReducer"
+import { setWarning } from "../../reducers/snackbarReducer"
 
 const styles = theme => ({
     root: {},
@@ -30,14 +29,11 @@ const styles = theme => ({
 
 const PlaylistInfo = props => {
     const [loading, setLoading] = useState(false)
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(0)
     const tracks = props.tracks.tracks.items
-    const { playlist } = props
-    const { classes } = props
-    const { album } = props.tracks
-    const { tabs } = props.tracks
-    const { differentArtists } = props.tracks
-    const artistLimit = 15
+    const { playlist, classes, setWarning } = props
+    const { album, differentArtists, tabs } = props.tracks
+    const artistLimit = 20
 
     const getTabs = async () => {
         props.getTabs({ tracks, id: playlist.id })
@@ -49,15 +45,23 @@ const PlaylistInfo = props => {
     }, [tabs])
 
     useEffect(() => {
+        if (differentArtists > artistLimit) {
+            setWarning()
+        }
+    }, [differentArtists, setWarning])
+
+    useEffect(() => {
         function tick() {
             // reset when reaching 100%
-            setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
-          }
-          const timer = setInterval(tick, 8 * differentArtists);
-          return () => {
-            clearInterval(timer);
-          };
-    }, [])
+            setProgress(oldProgress =>
+                oldProgress >= 100 ? 0 : oldProgress + 1
+            )
+        }
+        const timer = setInterval(tick, 8 * differentArtists)
+        return () => {
+            clearInterval(timer)
+        }
+    }, [differentArtists])
 
     return (
         <Grid
@@ -66,14 +70,13 @@ const PlaylistInfo = props => {
             alignItems="center"
             className={classes.playlist}
         >
-            <Warning artistLimit={artistLimit} show={differentArtists > artistLimit}/>
             <Grid item>
                 <Box height={300} width={300}>
-                <img
-                    src={playlist.images[0].url}
-                    className={classes.playlistPic}
-                    alt="Playlist"
-                />
+                    <img
+                        src={playlist.images[0].url}
+                        className={classes.playlistPic}
+                        alt="Playlist"
+                    />
                 </Box>
             </Grid>
             <Grid item xs className={classes.playlistInfo}>
@@ -101,7 +104,12 @@ const PlaylistInfo = props => {
                         {!loading ? (
                             "Get Tabs"
                         ) : (
-                            <CircularProgress variant="determinate" size={26} color="secondary" value={progress} />
+                            <CircularProgress
+                                variant="determinate"
+                                size={26}
+                                color="secondary"
+                                value={progress}
+                            />
                         )}
                     </Button>
                 ) : (
@@ -119,9 +127,11 @@ const PlaylistInfo = props => {
     )
 }
 
+
+
 const connectedPlaylistInfo = connect(
     null,
-    { getTabs }
+    { getTabs, setWarning }
 )(PlaylistInfo)
 
 export default withStyles(styles)(connectedPlaylistInfo)

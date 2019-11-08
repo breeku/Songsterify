@@ -23,7 +23,7 @@ import HomeIcon from "@material-ui/icons/Home"
 import SearchIcon from "@material-ui/icons/Search"
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-
+import Cookies from 'js-cookie'
 
 const drawerWidth = 300
 
@@ -34,7 +34,7 @@ const styles = theme => ({
     appBar: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
     },
     drawer: {
         width: drawerWidth,
@@ -54,10 +54,11 @@ const styles = theme => ({
 })
 
 const Appbar = props => {
-    const { classes } = props
+    const { classes, tokens } = props
 
     const handleLogout = () => {
-        window.localStorage.removeItem("SongsterrifyTokens")
+        Cookies.remove('accessToken')
+        Cookies.remove('refreshToken')
         window.location.href = "/"
     }
 
@@ -74,9 +75,8 @@ const Appbar = props => {
                         >
                             Songsterify
                         </Typography>
-                        {props.tokens &&
-                        props.tokens.accessToken &&
-                        props.tokens.refreshToken ? (
+                        {tokens &&
+                        tokens.accessToken ? (
                             <Button color="inherit" onClick={handleLogout}>Logout</Button>
                         ) : (
                             null
@@ -96,7 +96,7 @@ const Appbar = props => {
                 <Divider />
                 <List>
                     <Link className={classes.a} to="/">
-                        <ListItem button disabled={(props.tokens) && (props.tokens.refreshToken || props.tokens.refreshToken) ? false : true}>
+                        <ListItem button disabled={tokens && tokens.accessToken ? false : true}>
                             <ListItemIcon>
                                 <HomeIcon />
                             </ListItemIcon>
@@ -111,8 +111,8 @@ const Appbar = props => {
                             <ListItemText primary="Search" />
                         </ListItem>
                     </Link>
-                    <Link className={classes.a} to="#" style={{pointerEvents: "none"}}>
-                        <ListItem button disabled>
+                    <Link className={classes.a} to="/about/">
+                        <ListItem button>
                             <ListItemIcon>
                                 <HelpOutlineIcon />
                             </ListItemIcon>
@@ -121,9 +121,7 @@ const Appbar = props => {
                     </Link>
                 </List>
                 <Divider />
-                
                     <PlaylistList />
-                
             </Drawer>
         </React.Fragment>
     )

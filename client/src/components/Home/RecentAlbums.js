@@ -15,17 +15,17 @@ const styles = theme => ({
 })
 
 
-const RecentTracks = props => {
-    const { classes } = props
-    const { tracks } = props.tracks
+const RecentAlbums = props => {
+    const { classes, tracks } = props
+
     return (
         <div style={{width: "100%"}}>
         <h1 style={{textAlign: "center"}}>Recently played</h1>
         <Grid container spacing={3} justify="center">
-            {tracks.map(track => (
-                <Grid item key={track.track.id}>
-                    <Link className={classes.a} to={{pathname: "/playlist/" + track.track.album.id, state: {album: track.track.album}}}>
-                        <img src={track.track.album.images[1].url} alt="album" className={classes.playlistPic}/>
+            {Object.keys(tracks).map(id => (
+                <Grid item key={id}>
+                    <Link className={classes.a} to={{pathname: "/album/" + tracks[id].id}}>
+                        <img src={tracks[id].images[1].url} alt="album" className={classes.playlistPic}/>
                     </Link>
                 </Grid>
             ))}
@@ -34,4 +34,4 @@ const RecentTracks = props => {
     )
 }
 
-export default withStyles(styles)(RecentTracks)
+export default withStyles(styles)(RecentAlbums)
