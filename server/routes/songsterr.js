@@ -69,13 +69,11 @@ const getTabs = async tracks => {
                 g.match(/math/g)
             ) {
                 if (!newArtists.find(x => x.id === artist.id)) newArtists.push(artist)
-                console.log("YES: " + g)
             } else {
-                console.log("NO: " + g)
+                //
             }
         }
     }
-    console.log("~~~~~~")
     if (newArtists.length > 20) {
         return
     }
