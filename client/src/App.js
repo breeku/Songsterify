@@ -64,9 +64,9 @@ const App = props => {
             setToken()
         }
     }, [setToken, tokens])
-
+    
     useEffect(() => {
-        if (tokens && tokens.accessToken && !albums) {
+        if (tokens && tokens.accessToken && albums === null) {
             getRecentAlbums({ accessToken: tokens.accessToken })
         }
     }, [albums, getRecentAlbums, tokens])
@@ -113,7 +113,8 @@ const mapStateToProps = state => {
     return {
         tokens: state.tokens,
         playlists: state.playlists,
-        recent: state.recent
+        recent: state.recent,
+        albums: state.albums
     }
 }
 

@@ -4,7 +4,24 @@ import Cookies from "js-cookie"
 import store from "../store"
 const baseUrl = "/api/spotify/"
 
-// if status 401 hit refresh endpoint and try again
+let authTokenRequest;
+
+// This function makes a call to get the auth token
+// or it returns the same promise as an in-progress call to get the auth token
+// https://github.com/axios/axios/issues/450
+
+const getAuthToken = () => {
+  if (!authTokenRequest) {
+    authTokenRequest = refresh()
+    authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
+  }
+
+  return authTokenRequest;
+}
+
+const resetAuthTokenRequest = () =>  {
+  authTokenRequest = null;
+}
 
 const refreshToken = token => {
     return {
@@ -31,7 +48,8 @@ axios.interceptors.response.use(
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true
             try {
-                const response = await refresh()
+                const response = await getAuthToken()
+                console.log(response)
                 if (response.status === 201) {
                     const cookie = Cookies.get("accessToken")
                     store.dispatch(refreshToken({ accessToken: cookie }))
