@@ -49,7 +49,6 @@ axios.interceptors.response.use(
             originalRequest._retry = true
             try {
                 const response = await getAuthToken()
-                console.log(response)
                 if (response.status === 201) {
                     const cookie = Cookies.get("accessToken")
                     store.dispatch(refreshToken({ accessToken: cookie }))
