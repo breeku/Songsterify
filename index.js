@@ -10,14 +10,15 @@ const songsterrRouter = require("./server/routes/songsterr")
 const path = require("path")
 const app = express()
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
-})
+//const limiter = rateLimit({
+//    windowMs: 15 * 60 * 1000, // 15 minutes
+//    max: 100 // limit each IP to 100 requests per windowMs
+//})
 
-app.set("trust proxy", 1)
-app.use(limiter)
+//app.set("trust proxy", 1)
+//app.use(limiter)
 
+require('@cypress/code-coverage/middleware/express')(app)
 app.use(cors())
 app.use(bodyParser.json({ limit: "50mb" }))
 app.use(

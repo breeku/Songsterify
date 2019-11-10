@@ -95,16 +95,16 @@ const Appbar = props => {
                 <div className={classes.toolbar} />
                 <Divider />
                 <List>
-                    <Link className={classes.a} to="/">
-                        <ListItem button disabled={tokens && tokens.accessToken ? false : true}>
+                    <Link className={classes.a} to={tokens && tokens.accessToken ? "/" : "/login"}>
+                        <ListItem button>
                             <ListItemIcon>
                                 <HomeIcon />
                             </ListItemIcon>
                             <ListItemText primary="Home" />
                         </ListItem>
                     </Link>
-                    <Link className={classes.a} to="#" style={{pointerEvents: "none"}}>
-                        <ListItem button disabled>
+                    <Link className={classes.a} to={tokens && tokens.accessToken ? "/search/" : "/login"}>
+                        <ListItem button disabled={tokens && tokens.accessToken ? false : true}>
                             <ListItemIcon>
                                 <SearchIcon />
                             </ListItemIcon>

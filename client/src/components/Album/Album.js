@@ -6,7 +6,7 @@ import Vibrant from "node-vibrant"
 import { withStyles } from "@material-ui/core/styles"
 
 import TrackTable from "../Playlist&Album/TrackTable"
-import PlaylistInfo from "./PlaylistInfo"
+import AlbumInfo from "./AlbumInfo"
 import SkeletonPlaylist from "../Skeletons/SkeletonPlaylist"
 
 import {
@@ -39,33 +39,25 @@ const getBackgroundColor = async img => {
     return bgImage
 }
 
-const Playlist = props => {
-    const [playlist, setPlaylist] = useState(null)
+const Album = props => {
+    const [album, setAlbum] = useState(null)
     const [bg, setBackground] = useState(
         "linear-gradient(rgb(56, 64, 103), rgb(6, 9, 10) 85%)"
     )
-    const {
-        classes,
-        tokens,
-        location,
-        playlists,
-        tracks,
-        getTracks,
-        setBg
-    } = props
+    const { classes, tokens, location, tracks, albums, getAlbum, setBg } = props
 
-    const id = location.pathname.slice(10)
+    const id = location.pathname.slice(7)
 
     useEffect(() => {
         if (tokens && tokens.accessToken) {
             if (!tracks || (tracks && !tracks[id])) {
-                getTracks({
+                getAlbum({
                     id,
                     accessToken: tokens.accessToken
                 })
             }
         }
-    }, [getTracks, id, tokens, tracks])
+    }, [getAlbum, id, tokens, tracks])
 
     useEffect(() => {
         if (tracks && tracks[id] && tracks[id].bg) {
@@ -74,29 +66,29 @@ const Playlist = props => {
     }, [id, tracks])
 
     useEffect(() => {
-        if (playlists && !location.state) {
-            // linked from playlistlist
-            setPlaylist(playlists.playlists.items.find(x => x.id === id))
+        if (albums && albums.recent && !location.state) {
+            // linked from recent albums
+            setAlbum(albums.recent[id])
         } else if (location && location.state) {
             // linked from tracktable link
-            setPlaylist(location.state.playlist)
+            setAlbum(location.state.album)
         } else {
             // linked from /browse/ or refreshed page of a album which does not exist in recent
             // fetch
         }
-    }, [id, location, playlists])
+    }, [albums, id, location])
 
     useEffect(() => {
         const setBackgroundColor = async () => {
             setBg({
-                bg: await getBackgroundColor(playlist.images[0].url),
-                id: playlist.id
+                bg: await getBackgroundColor(album.images[0].url),
+                id: album.id
             })
         }
-        if (playlist && id && tracks && tracks[id] && !tracks[id].bg) {
+        if (album && id && tracks && tracks[id] && !tracks[id].bg) {
             setBackgroundColor()
         }
-    }, [id, playlist, setBg, tracks])
+    }, [album, id, setBg, tracks])
 
     return (
         <div
@@ -108,20 +100,10 @@ const Playlist = props => {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <div>
-                    {playlist &&
-                    playlist.id === id &&
-                    tracks &&
-                    tracks[id] &&
-                    bg ? (
+                    {album && album.id === id && tracks && tracks[id] && bg ? (
                         <React.Fragment>
-                            <PlaylistInfo
-                                playlist={playlist}
-                                tracks={tracks[id]}
-                            />
-                            <TrackTable
-                                playlist={playlist}
-                                tracks={tracks[id]}
-                            />
+                            <AlbumInfo album={album} tracks={tracks[id]} />
+                            <TrackTable playlist={album} tracks={tracks[id]} />
                         </React.Fragment>
                     ) : (
                         <SkeletonPlaylist />
@@ -141,9 +123,9 @@ const mapStateToProps = state => {
     }
 }
 
-const ConnectedPlaylists = connect(
+const ConnectedAlbum = connect(
     mapStateToProps,
     { clearTracks, getTracks, setBg, getAlbum, setAlbums }
-)(Playlist)
+)(Album)
 
-export default withRouter(withStyles(styles)(ConnectedPlaylists))
+export default withRouter(withStyles(styles)(ConnectedAlbum))

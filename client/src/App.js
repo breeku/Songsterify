@@ -10,14 +10,17 @@ import { connect } from "react-redux"
 import Main from "./components/Home/Home"
 import Callback from "./components/Callback"
 import Login from "./components/Login"
-import Tracks from "./components/Playlist/Playlist"
+import Playlist from "./components/Playlist/Playlist"
+import Album from "./components/Album/Album"
 import Appbar from "./components/Appbar/Appbar"
 import Warning from "./components/Snackbars/Warning"
 import About from "./components/About/About"
+import Search from "./components/Search/Search"
 
 import { getRecentAlbums } from "./reducers/albumReducer"
 import { setToken } from "./reducers/authReducer"
 import { initializePlaylists } from "./reducers/playlistReducer"
+import { getUser } from "./reducers/userReducer"
 
 const routes = [
     {
@@ -36,16 +39,21 @@ const routes = [
     },
     {
         path: "/playlist/:id",
-        main: () => <Tracks playlist />
+        main: () => <Playlist />
     },
     {
         path: "/album/:id",
-        main: () => <Tracks album />
+        main: () => <Album />
     },
     {
         path: "/about/",
         exact: true,
-        main: () => <About/>
+        main: () => <About />
+    },
+    {
+        path: "/search/",
+        exact: true,
+        main: () => <Search />
     }
 ]
 
@@ -56,7 +64,9 @@ const App = props => {
         getRecentAlbums,
         albums,
         initializePlaylists,
-        playlists
+        playlists,
+        user,
+        getUser
     } = props
 
     useEffect(() => {
@@ -64,7 +74,7 @@ const App = props => {
             setToken()
         }
     }, [setToken, tokens])
-    
+
     useEffect(() => {
         if (tokens && tokens.accessToken && albums === null) {
             getRecentAlbums({ accessToken: tokens.accessToken })
@@ -76,6 +86,12 @@ const App = props => {
             initializePlaylists(tokens)
         }
     }, [initializePlaylists, playlists, tokens])
+
+    useEffect(() => {
+        if (tokens && tokens.accessToken && !user) {
+            getUser({ accessToken: tokens.accessToken })
+        }
+    }, [getUser, tokens, user])
 
     const TokenRouting = () => {
         if (tokens) {
@@ -114,11 +130,17 @@ const mapStateToProps = state => {
         tokens: state.tokens,
         playlists: state.playlists,
         recent: state.recent,
-        albums: state.albums
+        albums: state.albums,
+        user: state.user
     }
 }
 
-const mapDispatchToProps = { setToken, getRecentAlbums, initializePlaylists }
+const mapDispatchToProps = {
+    setToken,
+    getRecentAlbums,
+    initializePlaylists,
+    getUser
+}
 
 const ConnectedApp = connect(
     mapStateToProps,

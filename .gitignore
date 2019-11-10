@@ -1,3 +1,15 @@
 node_modules
 .env
+cypress.env.json
 build
+
+.nyc_output
+cypress/videos
+cypress/screenshots
+coverage
+
+*.pid
+*.seed
+
+logs
+*.log
