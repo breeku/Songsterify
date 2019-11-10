@@ -103,8 +103,8 @@ const Appbar = props => {
                             <ListItemText primary="Home" />
                         </ListItem>
                     </Link>
-                    <Link className={classes.a} to="#" style={{pointerEvents: "none"}}>
-                        <ListItem button disabled>
+                    <Link className={classes.a} to="/search/">
+                        <ListItem button disabled={tokens && tokens.accessToken ? false : true}>
                             <ListItemIcon>
                                 <SearchIcon />
                             </ListItemIcon>

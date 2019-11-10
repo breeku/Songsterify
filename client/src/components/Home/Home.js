@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import { makeStyles } from "@material-ui/core/styles"
 
 import RecentAlbums from "./RecentAlbums"
-import SkeletonRecentAlbums from "./Skeleton/SkeletonRecentAlbums"
+import SkeletonRecentAlbums from "../Skeletons/SkeletonRecentAlbums"
 
 const useStyles = makeStyles(theme => ({
     root: {

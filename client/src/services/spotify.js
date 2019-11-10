@@ -4,23 +4,20 @@ import Cookies from "js-cookie"
 import store from "../store"
 const baseUrl = "/api/spotify/"
 
-let authTokenRequest;
+let isRefreshing = false
+let failedQueue = []
+let cookie = null
 
-// This function makes a call to get the auth token
-// or it returns the same promise as an in-progress call to get the auth token
-// https://github.com/axios/axios/issues/450
+const processQueue = (error, token = null) => { // https://gist.github.com/Godofbrowser/bf118322301af3fc334437c683887c5f
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error)
+        } else {
+            prom.resolve(token)
+        }
+    })
 
-const getAuthToken = () => {
-  if (!authTokenRequest) {
-    authTokenRequest = refresh()
-    authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
-  }
-
-  return authTokenRequest;
-}
-
-const resetAuthTokenRequest = () =>  {
-  authTokenRequest = null;
+    failedQueue = []
 }
 
 const refreshToken = token => {
@@ -46,12 +43,32 @@ axios.interceptors.response.use(
     async error => {
         let originalRequest = error.config
         if (error.response.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                return new Promise(function(resolve, reject) {
+                    failedQueue.push({ resolve, reject })
+                })
+                    .then(token => {
+                        let originalData = JSON.parse(originalRequest.data)
+                        originalData = { ...originalData, accessToken: token }
+                        originalRequest = {
+                            ...originalRequest,
+                            data: JSON.stringify(originalData)
+                        }
+                        return axios(originalRequest)
+                    })
+                    .catch(err => {
+                        return Promise.reject(err)
+                    })
+            }
+
+            isRefreshing = true
             originalRequest._retry = true
+
             try {
-                const response = await getAuthToken()
+                const response = await refresh()
+
                 if (response.status === 201) {
-                    const cookie = Cookies.get("accessToken")
-                    store.dispatch(refreshToken({ accessToken: cookie }))
+                    cookie = Cookies.get("accessToken")
 
                     let originalData = JSON.parse(originalRequest.data)
                     originalData = { ...originalData, accessToken: cookie }
@@ -59,11 +76,21 @@ axios.interceptors.response.use(
                         ...originalRequest,
                         data: JSON.stringify(originalData)
                     }
+                    processQueue(null, cookie)
 
+                    setTimeout(() => { // need to delay the refresh to avoid duplicate requests due to useEffect
+                        store.dispatch(refreshToken({ accessToken: cookie }))
+                        cookie = null
+                    }, 1000)
+
+                    isRefreshing = false
                     return axios(originalRequest)
                 }
             } catch (e) {
-                return Promise.reject(error)
+                processQueue(e, null)
+
+                isRefreshing = false
+                return Promise.reject(e)
             }
         }
         return Promise.reject(error)
@@ -90,9 +117,15 @@ const getAlbum = async obj => {
     return response.data
 }
 
+const searchSpotify = async obj => {
+    const response = await axios.post(baseUrl + "search", obj)
+    return response.data
+}
+
 export default {
     getPlaylists,
     getTracks,
     getRecentTracks,
-    getAlbum
+    getAlbum,
+    searchSpotify
 }

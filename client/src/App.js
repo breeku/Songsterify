@@ -10,10 +10,12 @@ import { connect } from "react-redux"
 import Main from "./components/Home/Home"
 import Callback from "./components/Callback"
 import Login from "./components/Login"
-import Tracks from "./components/Playlist/Playlist"
+import Playlist from "./components/Playlist/Playlist"
+import Album from "./components/Album/Album"
 import Appbar from "./components/Appbar/Appbar"
 import Warning from "./components/Snackbars/Warning"
 import About from "./components/About/About"
+import Search from "./components/Search/Search"
 
 import { getRecentAlbums } from "./reducers/albumReducer"
 import { setToken } from "./reducers/authReducer"
@@ -36,16 +38,21 @@ const routes = [
     },
     {
         path: "/playlist/:id",
-        main: () => <Tracks playlist />
+        main: () => <Playlist />
     },
     {
         path: "/album/:id",
-        main: () => <Tracks album />
+        main: () => <Album />
     },
     {
         path: "/about/",
         exact: true,
         main: () => <About/>
+    },
+    {
+        path: "/search/",
+        exact: true,
+        main: () => <Search/>
     }
 ]
 
@@ -58,7 +65,7 @@ const App = props => {
         initializePlaylists,
         playlists
     } = props
-
+    
     useEffect(() => {
         if (!tokens) {
             setToken()
