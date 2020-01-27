@@ -29,7 +29,6 @@ jobs:
  
       - name: Cypress run
         uses: cypress-io/github-action@v1
-        env: refreshToken=${{ secrets.refreshToken }}
         with:
           env: refreshToken=${{ secrets.refreshToken }}
           config-file: gh_actions.cypress.json
