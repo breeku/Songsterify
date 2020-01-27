@@ -24,8 +24,8 @@ jobs:
           CALLBACK: ${{secrets.CALLBACK}}
           PORT: ${{ secrets.PORT }}
 
-      - name: React build
-        run: npm run start-client
+      - name: React start in the background
+        run: npm run start-client &
  
       - name: Cypress run
         uses: cypress-io/github-action@v1
@@ -38,7 +38,7 @@ jobs:
 
       - name: Coverage
         run: npm run report:coverage:text
-        
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
