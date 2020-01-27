@@ -7,14 +7,22 @@ const ArtistGrid = props => {
     return (
         <Grid container spacing={3} justify="center">
             {artists.map(artist => (
-                <Grid item key={artist.id}>
-                    <Box height={300} width={300}>
-                    <img
-                        src={artist.images[1] ? artist.images[1].url : null}
-                        alt="artist"
-                        className={classes.playlistPic}
-                    />
-                    </Box>
+                <Grid item className={classes.container} key={artist.id}>
+                    {artist.images[1] ? (
+                        <img
+                            src={artist.images[1].url}
+                            alt="playlist"
+                            className={classes.playlistPic}
+                        />
+                    ) : (
+                        <Box
+                            height={300}
+                            width={300}
+                            className={classes.missingPic}
+                        ></Box>
+                    )}
+
+                    <div className={classes.aboutOverlay}>{artist.name}</div>
                 </Grid>
             ))}
         </Grid>

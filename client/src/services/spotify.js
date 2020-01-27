@@ -122,10 +122,16 @@ const searchSpotify = async obj => {
     return response.data
 }
 
+const getUser = async obj => {
+    const response = await axios.post(baseUrl + "user", obj)
+    return response.data
+}
+
 export default {
     getPlaylists,
     getTracks,
     getRecentTracks,
     getAlbum,
-    searchSpotify
+    searchSpotify,
+    getUser
 }

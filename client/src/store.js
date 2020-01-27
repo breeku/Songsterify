@@ -8,6 +8,7 @@ import trackReducer from "./reducers/trackReducer"
 import albumReducer from "./reducers/albumReducer"
 import snackbarReducer from "./reducers/snackbarReducer"
 import searchReducer from "./reducers/searchReducer"
+import userReducer from "./reducers/userReducer"
 
 const reducer = combineReducers({
     playlists: playlistReducer,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
     tracks: trackReducer,
     albums: albumReducer,
     snackbars: snackbarReducer,
-    search: searchReducer
+    search: searchReducer,
+    user: userReducer
 })
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))

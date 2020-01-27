@@ -9,7 +9,7 @@ const PlaylistGrid = props => {
     return (
         <Grid container spacing={3} justify="center">
             {playlists.map(playlist => (
-                <Grid item key={playlist.id}>
+                <Grid item className={classes.container} key={playlist.id}>
                     <Link
                         className={classes.a}
                         to={{
@@ -17,14 +17,22 @@ const PlaylistGrid = props => {
                             state: { playlist }
                         }}
                     >
-                        <Box height={300} width={300}>
-                        <img
-                            src={playlist.images[1] ? playlist.images[1].url : null}
-                            alt="playlist"
-                            className={classes.playlistPic}
-                        />
-                        </Box>
+                        
+                        {playlist.images[1] ? (
+                            <img
+                                src={playlist.images[1].url}
+                                alt="playlist"
+                                className={classes.playlistPic}
+                            />
+                        ) : (
+                            <Box
+                                height={300}
+                                width={300}
+                                className={classes.missingPic}
+                            ></Box>
+                        )}
                     </Link>
+                    <div className={classes.aboutOverlay}>{playlist.name} <br/> Tracks: {playlist.tracks.total} <br/> By: {playlist.owner.display_name}</div>
                 </Grid>
             ))}
         </Grid>

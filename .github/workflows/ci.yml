@@ -1,0 +1,39 @@
+name: E2E
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        
+      - name: Install server dependencies
+        uses: bahmutov/npm-install@v1
+        
+      - name: Install client dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: client
+
+      - name: Start server in the background
+        run: npm start &
+        env:
+          CLIENT_ID: ${{secrets.CLIENT_ID}}
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+          CALLBACK: ${{secrets.CALLBACK}}
+          PORT: ${{ secrets.PORT }}
+
+      - name: React build
+        run: npm run heroku-postbuild
+ 
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
+        env: refreshToken=${{ secrets.refreshToken }}
+        with:
+          env: refreshToken=${{ secrets.refreshToken }}
+          config-file: gh_actions.cypress.json
+          wait-on: 'http://localhost:3000'
+          # wait for 2 minutes for the server to respond
+          wait-on-timeout: 120
+

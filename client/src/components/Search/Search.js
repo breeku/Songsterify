@@ -39,7 +39,30 @@ const useStyles = makeStyles(theme => ({
         width: "100%"
     },
     playlistPic: {
+        maxWidth: "300px",
+        maxHeight: "300px",
+        minWidth: "300px",
+        minHeight: "300px",
         boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);"
+    },
+    missingPic: {
+        backgroundColor: "rgba(0,0,0,0.2)"
+    },
+    container: {
+        position: "relative",
+        textAlign: "center",
+        color: "white",
+    },
+    aboutOverlay: {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "rgba(0,0,0,0.2)",
+        paddingRight: "2em",
+        paddingLeft: "2em",
+        whiteSpace: "nowrap",
+        pointerEvents: "none"
     }
 }))
 
@@ -143,16 +166,6 @@ const Search = props => {
                                     : true
                             }
                             {...a11yProps(2)}
-                        />
-                        <Tab
-                            classes={{textColorSecondary: classes.a}}
-                            label="Tracks"
-                            disabled={
-                                search && search.tracks.items.length > 0
-                                    ? false
-                                    : true
-                            }
-                            {...a11yProps(3)}
                         />
                     </Tabs>
                 </Paper>

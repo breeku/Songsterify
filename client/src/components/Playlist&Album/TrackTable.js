@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react"
 
 import { Link } from "react-router-dom"
 
-import Table from "@material-ui/core/Table"
-import TableBody from "@material-ui/core/TableBody"
-import TableCell from "@material-ui/core/TableCell"
-import TableHead from "@material-ui/core/TableHead"
-import TableRow from "@material-ui/core/TableRow"
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import Button from "@material-ui/core/Button"
+import Table from "@material-ui/core/Table"
+import TableHead from "@material-ui/core/TableHead"
+import TableCell from "@material-ui/core/TableCell"
+import TableBody from "@material-ui/core/TableBody"
+import TableRow from "@material-ui/core/TableRow"
 import { withStyles } from "@material-ui/core/styles"
 
 import Tab from "./Tab/Tab"
@@ -49,10 +49,10 @@ const styles = theme => ({
     }
 })
 
-const millisToMinutesAndSeconds = (millis) => {
-    const minutes = Math.floor(millis / 60000);
-    const seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+const millisToMinutesAndSeconds = millis => {
+    const minutes = Math.floor(millis / 60000)
+    const seconds = ((millis % 60000) / 1000).toFixed(0)
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds
 }
 
 const TrackTable = props => {
@@ -157,20 +157,26 @@ const TrackTable = props => {
                                             className={classes.a}
                                             to={{
                                                 pathname:
-                                                    "/album/" +
-                                                    track.album.id,
+                                                    "/album/" + track.album.id,
                                                 state: { album: track.album }
                                             }}
                                         >
                                             {track.album.name}
                                         </Link>
-                                    ) : <React.Fragment>{playlist.name}</React.Fragment>}
+                                    ) : (
+                                        <React.Fragment>
+                                            {playlist.name}
+                                        </React.Fragment>
+                                    )}
                                 </TableCell>
                                 <TableCell
                                     align="right"
                                     className={classes.text}
                                 >
-                                    {millisToMinutesAndSeconds(track.duration_ms)} min
+                                    {millisToMinutesAndSeconds(
+                                        track.duration_ms
+                                    )}{" "}
+                                    min
                                 </TableCell>
                             </TableRow>
                         ))}

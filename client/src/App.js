@@ -20,6 +20,7 @@ import Search from "./components/Search/Search"
 import { getRecentAlbums } from "./reducers/albumReducer"
 import { setToken } from "./reducers/authReducer"
 import { initializePlaylists } from "./reducers/playlistReducer"
+import { getUser } from "./reducers/userReducer"
 
 const routes = [
     {
@@ -47,12 +48,12 @@ const routes = [
     {
         path: "/about/",
         exact: true,
-        main: () => <About/>
+        main: () => <About />
     },
     {
         path: "/search/",
         exact: true,
-        main: () => <Search/>
+        main: () => <Search />
     }
 ]
 
@@ -63,15 +64,17 @@ const App = props => {
         getRecentAlbums,
         albums,
         initializePlaylists,
-        playlists
+        playlists,
+        user,
+        getUser
     } = props
-    
+
     useEffect(() => {
         if (!tokens) {
             setToken()
         }
     }, [setToken, tokens])
-    
+
     useEffect(() => {
         if (tokens && tokens.accessToken && albums === null) {
             getRecentAlbums({ accessToken: tokens.accessToken })
@@ -83,6 +86,12 @@ const App = props => {
             initializePlaylists(tokens)
         }
     }, [initializePlaylists, playlists, tokens])
+
+    useEffect(() => {
+        if (tokens && tokens.accessToken && !user) {
+            getUser({ accessToken: tokens.accessToken })
+        }
+    }, [getUser, tokens, user])
 
     const TokenRouting = () => {
         if (tokens) {
@@ -121,11 +130,17 @@ const mapStateToProps = state => {
         tokens: state.tokens,
         playlists: state.playlists,
         recent: state.recent,
-        albums: state.albums
+        albums: state.albums,
+        user: state.user
     }
 }
 
-const mapDispatchToProps = { setToken, getRecentAlbums, initializePlaylists }
+const mapDispatchToProps = {
+    setToken,
+    getRecentAlbums,
+    initializePlaylists,
+    getUser
+}
 
 const ConnectedApp = connect(
     mapStateToProps,

@@ -1,0 +1,11 @@
+{
+    "baseUrl": "http://localhost:3000",
+    "chromeWebSecurity": false,
+    "viewportWidth": 1920,
+    "viewportHeight": 1080,
+    "env": {
+        "codeCoverage": {
+          "url": "http://localhost:3000/__coverage__"
+        }
+      }
+}

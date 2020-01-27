@@ -69,6 +69,12 @@ const Search = async (value, accessToken) => {
     return results.body
 }
 
+const getUserAbout = async accessToken => {
+    await spotifyApi.setAccessToken(accessToken)
+    const results = await spotifyApi.getMe()
+    return results.body
+}
+
 spotifyRouter.post("/playlists", async (req, res) => {
     try {
         const playlists = await getPlaylists(req.body.accessToken)
@@ -121,6 +127,17 @@ spotifyRouter.post("/album", async (req, res) => {
 spotifyRouter.post("/search", async (req, res) => {
     try {
         const results = await Search(req.body.value, req.body.accessToken)
+        res.send(results)
+    } catch (e) {
+        console.log(e)
+        Sentry.captureException(e)
+        res.sendStatus(e.statusCode)
+    }
+})
+
+spotifyRouter.post("/user", async (req, res) => {
+    try {
+        const results = await getUserAbout(req.body.accessToken)
         res.send(results)
     } catch (e) {
         console.log(e)

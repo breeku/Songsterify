@@ -24,14 +24,19 @@ const useStyles = makeStyles(theme => ({
 
 const Home = props => {
     const classes = useStyles()
-    const { albums } = props
+    const { albums, user } = props
 
     return (
         <div className={classes.root}>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                {albums ? (
-                    <RecentAlbums tracks={albums.recent} />
+                {albums && user ? (
+                    <React.Fragment>
+                        <h2>
+                            Welcome {user.display_name}!
+                        </h2>
+                        <RecentAlbums tracks={albums.recent} />
+                    </React.Fragment>
                 ) : (
                     <SkeletonRecentAlbums />
                 )}
@@ -42,7 +47,8 @@ const Home = props => {
 
 const mapStateToProps = state => {
     return {
-        albums: state.albums
+        albums: state.albums,
+        user: state.user
     }
 }
 
