@@ -36,6 +36,9 @@ jobs:
           # wait for 2 minutes for the server to respond
           wait-on-timeout: 120
 
+      - name: Coverage
+        run: npm run report:coverage:text
+        
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
