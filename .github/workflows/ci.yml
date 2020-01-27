@@ -36,3 +36,9 @@ jobs:
           # wait for 2 minutes for the server to respond
           wait-on-timeout: 120
 
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+
