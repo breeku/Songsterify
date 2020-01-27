@@ -24,6 +24,7 @@
   },
   "scripts": {
     "start": "node index.js",
+    "start-client": "cd client && npm run start",
     "start:coverage": "nyc --silent node index.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "report:coverage:text": "nyc report --reporter=text"

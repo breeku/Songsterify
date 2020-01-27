@@ -25,7 +25,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
 
       - name: React build
-        run: npm run heroku-postbuild
+        run: npm run start-client
  
       - name: Cypress run
         uses: cypress-io/github-action@v1
