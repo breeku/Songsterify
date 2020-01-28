@@ -33,7 +33,6 @@ jobs:
           env: refreshToken=${{ secrets.refreshToken }}
           config-file: gh_actions.cypress.json
           wait-on: 'http://localhost:3000'
-          wait-on: 'http://localhost:3003'
           # wait for 2 minutes for the server to respond
           wait-on-timeout: 120
 
