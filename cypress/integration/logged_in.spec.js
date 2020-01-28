@@ -104,6 +104,8 @@ describe("Logged in", function() {
             ).click()
 
             cy.url().should("include", "/about")
+
+            cy.get("main > div > h1").should("contain", "About")
         })
     })
 
@@ -125,7 +127,7 @@ describe("Logged in", function() {
     })
 
     describe("Tabs", function() {
-        this.beforeAll(function() {
+        this.beforeEach(function() {
             cy.visit("/")
         })
 
@@ -180,6 +182,21 @@ describe("Logged in", function() {
             cy.get(
                 "div.MuiDialogContent-root > a > span.MuiButton-label"
             ).should("contain", "Open")
+        })
+
+        it("Get tabs from a album", function() {
+            cy.get("div > div:nth-child(1) > a > img").click()
+
+            cy.url().should("include", "/album/")
+
+            cy.get(
+                "button.MuiButtonBase-root:nth-child(4) > span:nth-child(1)"
+            ).click()
+
+            cy.get("main > div:nth-child(2) > table > tbody > tr")
+                .eq(0)
+                .should("contain", "1")
+                .should("have.css", "background-color")
         })
     })
 })
