@@ -5,6 +5,8 @@ describe("Logged in", function() {
         cy.setCookie("accessToken", "null")
         cy.setCookie("refreshToken", Cypress.env("refreshToken"))
         cy.visit("/")
+
+        cy.get("h2").should("contain", "spotttm")
     })
 
     after(function() {
@@ -13,12 +15,6 @@ describe("Logged in", function() {
 
     beforeEach(function() {
         Cypress.Cookies.preserveOnce("accessToken", "refreshToken")
-    })
-
-    it("Am logged in when cookies are set", function() {
-        cy.url().should("include", "/")
-
-        cy.get("h2").should("contain", "spotttm")
     })
 
     describe("Search", function() {
@@ -189,14 +185,35 @@ describe("Logged in", function() {
 
             cy.url().should("include", "/album/")
 
+            // Click Get Tabs
             cy.get(
                 "button.MuiButtonBase-root:nth-child(4) > span:nth-child(1)"
             ).click()
 
+            // Check that color changes
             cy.get("main > div:nth-child(2) > table > tbody > tr")
                 .eq(0)
                 .should("contain", "1")
                 .should("have.css", "background-color")
+                .and("match", /^rgba.(0, 0, 0, 0.6.)|rgba.(0, 220, 0, 0.5.)/)
+        })
+    })
+
+    describe("Logout", function() {
+        it("Can logout", function() {
+            cy.visit("/")
+
+            cy.get("div > button > span.MuiButton-label").click()
+
+            cy.reload()
+
+            cy.url().should("include", "/login")
+
+            cy.get("h1").should("contain", "Welcome to Songsterify")
+
+            cy.get(
+                "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-3.MuiGrid-justify-xs-center > div > a > span.MuiButton-label"
+            ).should("contain", "Login via Spotify")
         })
     })
 })

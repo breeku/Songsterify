@@ -17,5 +17,15 @@ describe("Logged out", function() {
     
         cy.url().should('include', '/login')
     })
+
+    it("Can visit about", function() {
+        cy.get(
+            "div > ul > a:nth-child(3) > div > div.MuiListItemText-root > span"
+        ).click()
+
+        cy.url().should("include", "/about")
+
+        cy.get("main > div > h1").should("contain", "About")
+    })
     
 })
