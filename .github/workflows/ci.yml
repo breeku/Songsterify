@@ -2,46 +2,44 @@ name: E2E
 on: [push]
 
 jobs:
-  cypress-run:
-    runs-on: ubuntu-16.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-        
-      - name: Install server dependencies
-        uses: bahmutov/npm-install@v1
-        
-      - name: Install client dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: client
+    cypress-run:
+        runs-on: ubuntu-16.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v1
 
-      - name: Start server in the background
-        run: npm run start:coverage &
-        env:
-          CLIENT_ID: ${{secrets.CLIENT_ID}}
-          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-          CALLBACK: ${{secrets.CALLBACK}}
-          PORT: ${{ secrets.PORT }}
+            - name: Install server dependencies
+              uses: bahmutov/npm-install@v1
 
-      - name: React start in the background
-        run: npm run start-client &
- 
-      - name: Cypress run
-        uses: cypress-io/github-action@v1
-        with:
-          env: refreshToken=${{ secrets.refreshToken }}
-          config-file: gh_actions.cypress.json
-          wait-on: 'http://localhost:3000'
-          # wait for 2 minutes for the server to respond
-          wait-on-timeout: 120
+            - name: Install client dependencies
+              uses: bahmutov/npm-install@v1
+              with:
+                  working-directory: client
 
-      - name: Coverage
-        run: npm run report:coverage:text
+            - name: Start server in the background
+              run: npm run start:coverage &
+              env:
+                  CLIENT_ID: ${{secrets.CLIENT_ID}}
+                  CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+                  CALLBACK: ${{secrets.CALLBACK}}
+                  PORT: ${{ secrets.PORT }}
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+            - name: React start in the background
+              run: npm run start-ci &
 
+            - name: Cypress run
+              uses: cypress-io/github-action@v1
+              with:
+                  env: refreshToken=${{ secrets.refreshToken }}
+                  config-file: gh_actions.cypress.json
+                  wait-on: "http://localhost:3000"
+                  # wait for 2 minutes for the server to respond
+                  wait-on-timeout: 120
 
+            - name: Coverage
+              run: npm run report:coverage:text
+
+            - name: Coveralls
+              uses: coverallsapp/github-action@master
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
