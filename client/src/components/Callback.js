@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import { setToken } from "../reducers/authReducer"
 
+/* istanbul ignore next */
 const Callback = props => {
     const code = props.location.search.slice(6)
 

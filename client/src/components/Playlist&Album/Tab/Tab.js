@@ -13,6 +13,7 @@ const Tab = track => {
     const id = track.tab.instrumentId
     if (id === 30 || id === 34) {
         let tuning = ""
+        /* istanbul ignore else */
         if (track.tab.tuning.length === 7) {
             // 7 string
             for (const tune of track.tab.tuning.reverse()) {
@@ -55,6 +56,7 @@ const Tab = track => {
             // 5 / 4 string, bass
         }
 
+        /* istanbul ignore next */
         const handleClick = () => {
             setOpen(!open)
         }

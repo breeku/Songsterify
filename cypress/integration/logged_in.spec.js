@@ -14,12 +14,17 @@ describe("Logged in", function() {
     })
 
     beforeEach(function() {
+        cy.visit("/")
         Cypress.Cookies.preserveOnce("accessToken", "refreshToken")
     })
 
     describe("Search", function() {
-        this.beforeEach(function() {
-            cy.visit("/search")
+        beforeEach(function() {
+            cy.get(
+                "div > ul > a:nth-child(2) > div > div.MuiListItemText-root > span"
+            ).click()
+
+            cy.url().should("include", "/search")
         })
 
         it("Can visit search", function() {
@@ -95,6 +100,9 @@ describe("Logged in", function() {
 
     describe("About", function() {
         it("Can visit about", function() {
+            cy.visit("/")
+            cy.get("h2").should("contain", "spotttm")
+
             cy.get(
                 "div > ul > a:nth-child(3) > div > div.MuiListItemText-root > span"
             ).click()
@@ -107,11 +115,8 @@ describe("Logged in", function() {
 
     describe("Recently played", function() {
         it("Can visit a recent played album", function() {
-            cy.get(
-                "div > ul > a:nth-child(1) > div > div.MuiListItemText-root > span"
-            ).click()
-
-            cy.url().should("include", "/")
+            cy.visit("/")
+            cy.get("h2").should("contain", "spotttm")
 
             // Click the first album
             cy.get("div > div:nth-child(1) > a > img").click()
@@ -123,10 +128,6 @@ describe("Logged in", function() {
     })
 
     describe("Tabs", function() {
-        this.beforeEach(function() {
-            cy.visit("/")
-        })
-
         it("Cant get tabs if too many diff artists in playlist", function() {
             cy.get("div > div.scrollbar-container.ps.ps--active-y")
                 .contains("cypress_big")
@@ -140,6 +141,12 @@ describe("Logged in", function() {
             cy.get("div:nth-child(2) > div > div > button").should(
                 "be.disabled"
             )
+
+            // Close notification
+
+            cy.get(
+                "div:nth-child(3) > div > div > div.MuiSnackbarContent-action > button"
+            ).click({ force: true })
         })
 
         it("Returns tabs from a playlist", function() {
@@ -164,7 +171,7 @@ describe("Logged in", function() {
             // Second should be black
             cy.get("main > div:nth-child(2) > table > tbody > tr")
                 .eq(1)
-                .should("contain", "3")
+                .should("contain", "2")
                 .should("have.css", "background-color")
                 .and("eq", "rgba(0, 0, 0, 0.6)")
 
@@ -173,11 +180,24 @@ describe("Logged in", function() {
                 .eq(0)
                 .click()
 
-            cy.get("#alert-dialog-title > h2").should("contain", "Never Meant")
+            cy.get("#alert-dialog-title > h2").should("contain", "Rautasorkka")
 
             cy.get(
                 "div.MuiDialogContent-root > a > span.MuiButton-label"
             ).should("contain", "Open")
+
+            cy.get("div.MuiButtonBase-root:nth-child(3)").should(
+                "contain",
+                "Guitar"
+            )
+
+            cy.get(
+                "div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > span:nth-child(1)"
+            ).should("contain", "Difficulty")
+
+            cy.get(
+                "div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > div:nth-child(1)"
+            ).should("contain", "Tuning")
         })
 
         it("Get tabs from a album", function() {
@@ -199,10 +219,29 @@ describe("Logged in", function() {
         })
     })
 
+    describe("Token refresh", function() {
+        it("Refreshes old accesstoken", function() {
+            cy.get("h2").should("contain", "spotttm")
+
+            cy.window()
+                .its("store")
+                .invoke("dispatch", {
+                    type: "SET_TOKEN",
+                    data: { accessToken: "invalid" }
+                })
+
+            cy.clearCookie("accesstoken")
+
+            cy.get("div > div:nth-child(1) > a > img").click()
+
+            cy.url().should("include", "/album/")
+
+            cy.get("h2").should("contain", "Album")
+        })
+    })
+
     describe("Logout", function() {
         it("Can logout", function() {
-            cy.visit("/")
-
             cy.get("div > button > span.MuiButton-label").click()
 
             cy.reload()
