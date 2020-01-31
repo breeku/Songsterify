@@ -55,6 +55,7 @@ const styles = theme => ({
 
 const Appbar = props => {
     const { classes, tokens } = props
+    const redirectUrl = "https://accounts.spotify.com/authorize?client_id=aef42b48cc74441299b7b1ac9b42a779&response_type=code&redirect_uri=http://localhost:3000/callback/&scope=user-read-recently-played%20user-top-read"
 
     const handleLogout = () => {
         Cookies.remove('accessToken')
@@ -79,7 +80,7 @@ const Appbar = props => {
                         tokens.accessToken ? (
                             <Button color="inherit" onClick={handleLogout}>Logout</Button>
                         ) : (
-                            null
+                            <Button color="inherit" href={redirectUrl}>Login</Button>
                         )}
                     </Toolbar>
                 </AppBar>

@@ -76,7 +76,7 @@ const App = props => {
     }, [setToken, tokens])
 
     useEffect(() => {
-        if (tokens && tokens.accessToken && albums === null) {
+        if (tokens && tokens.accessToken && !albums) {
             getRecentAlbums({ accessToken: tokens.accessToken })
         }
     }, [albums, getRecentAlbums, tokens])
@@ -91,7 +91,7 @@ const App = props => {
         if (tokens && tokens.accessToken && !user) {
             getUser({ accessToken: tokens.accessToken })
         }
-    }, [getUser, tokens, user])
+    }, [getUser, user, tokens])
 
     const TokenRouting = () => {
         if (tokens) {

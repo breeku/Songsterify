@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
-import Vibrant from "node-vibrant"
 
 import { withStyles } from "@material-ui/core/styles"
 
@@ -9,14 +8,13 @@ import TrackTable from "../Playlist&Album/TrackTable"
 import PlaylistInfo from "./PlaylistInfo"
 import SkeletonPlaylist from "../Skeletons/SkeletonPlaylist"
 
+import getBackgroundColor from "../../utils/getBackgroundColor"
+
 import {
     setBg,
     clearTracks,
     getTracks,
-    getAlbum
 } from "../../reducers/trackReducer"
-
-import { setAlbums } from "../../reducers/albumReducer"
 
 const styles = theme => ({
     root: {
@@ -29,15 +27,6 @@ const styles = theme => ({
     },
     toolbar: theme.mixins.toolbar
 })
-
-const getBackgroundColor = async img => {
-    // https://github.com/idanlo/react-spotify/blob/master/src/Components/PlaylistView/PlaylistView.jsx
-    const palette = await Vibrant.from(img).getPalette()
-    let rgb = palette.DarkMuted._rgb.join(", ")
-    let color = "rgb(" + rgb + ")"
-    let bgImage = `linear-gradient(${color}, rgb(6, 9, 10) 85%)`
-    return bgImage
-}
 
 const Playlist = props => {
     const [playlist, setPlaylist] = useState(null)
@@ -143,7 +132,7 @@ const mapStateToProps = state => {
 
 const ConnectedPlaylists = connect(
     mapStateToProps,
-    { clearTracks, getTracks, setBg, getAlbum, setAlbums }
+    { clearTracks, getTracks, setBg }
 )(Playlist)
 
 export default withRouter(withStyles(styles)(ConnectedPlaylists))

@@ -7,7 +7,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import { withStyles } from "@material-ui/core/styles"
 
-import Skeleton from "@material-ui/lab/Skeleton"
+import SkeletonPlaylists from "../Skeletons/SkeletonPlaylists"
 
 import PerfectScrollbar from "react-perfect-scrollbar"
 import "react-perfect-scrollbar/dist/css/styles.css"
@@ -18,18 +18,6 @@ const styles = theme => ({
         textDecoration: "none"
     }
 })
-
-const SkeletonPlaylists = () => {
-    return (
-        <React.Fragment>
-            <Skeleton
-                variant="rect"
-                width="100%"
-                height="calc(100vh - 170px)"
-            />
-        </React.Fragment>
-    )
-}
 
 const PlaylistList = props => {
     const { classes, playlists, tokens } = props
