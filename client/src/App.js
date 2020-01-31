@@ -13,9 +13,9 @@ import Login from "./components/Login"
 import Playlist from "./components/Playlist/Playlist"
 import Album from "./components/Album/Album"
 import Appbar from "./components/Appbar/Appbar"
-import Warning from "./components/Snackbars/Warning"
 import About from "./components/About/About"
 import Search from "./components/Search/Search"
+import Notifier from "./components/Notifier/Notifier"
 
 import { getRecentAlbums } from "./reducers/albumReducer"
 import { setToken } from "./reducers/authReducer"
@@ -107,9 +107,9 @@ const App = props => {
     return (
         <React.Fragment>
             <Router>
+                <Notifier/>
                 <TokenRouting />
                 <Appbar />
-                <Warning />
                 <Switch>
                     {routes.map((route, index) => (
                         <Route

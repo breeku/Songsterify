@@ -8,6 +8,7 @@ let cookie = null
 
 const processQueue = (error, token = null) => { // https://gist.github.com/Godofbrowser/bf118322301af3fc334437c683887c5f
     failedQueue.forEach(prom => {
+        /* istanbul ignore next */
         if (error) {
             prom.reject(error)
         } else {
@@ -22,6 +23,7 @@ axios.interceptors.request.use(
     config => {
         return config
     },
+    /* istanbul ignore next */
     error => {
         Promise.reject(error)
     }
@@ -47,6 +49,7 @@ axios.interceptors.response.use(
                         }
                         return axios(originalRequest)
                     })
+                    /* istanbul ignore next */
                     .catch(err => {
                         return Promise.reject(err)
                     })
@@ -72,6 +75,7 @@ axios.interceptors.response.use(
                     isRefreshing = false
                     return axios(originalRequest)
                 }
+                /* istanbul ignore next */
             } catch (e) {
                 processQueue(e, null)
 

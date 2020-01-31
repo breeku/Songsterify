@@ -8,7 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress"
 import Box from "@material-ui/core/Box"
 
 import { getTabs } from "../../reducers/trackReducer"
-import { setWarning } from "../../reducers/snackbarReducer"
+import { enqueueSnackbar, closeSnackbar } from "../../reducers/snackbarReducer"
 
 const styles = theme => ({
     root: {},
@@ -31,7 +31,7 @@ const PlaylistInfo = props => {
     const [loading, setLoading] = useState(false)
     const [progress, setProgress] = useState(0)
     const tracks = props.tracks.tracks.items
-    const { playlist, classes, setWarning } = props
+    const { playlist, classes, enqueueSnackbar, closeSnackbar } = props
     const { album, differentArtists, tabs } = props.tracks
     const artistLimit = 20
 
@@ -41,14 +41,58 @@ const PlaylistInfo = props => {
     }
 
     useEffect(() => {
-        if (tabs) setLoading(false)
-    }, [tabs])
+        if (tabs) {
+            enqueueSnackbar({
+                message:
+                    "Found " +
+                    tabs.length +
+                    " tab" +
+                    (tabs.length > 0
+                        ? tabs.length === 1
+                            ? "!"
+                            : "s!"
+                        : "s :("),
+                options: {
+                    key: new Date().getTime() + Math.random(),
+                    autoHideDuration: 1500,
+                    variant: tabs.length > 0 ? "success" : "error",
+                    anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "right"
+                    },
+                    action: key => (
+                        <Button onClick={() => closeSnackbar(key)}>
+                            dismiss me
+                        </Button>
+                    )
+                }
+            })
+            setLoading(false)
+        }
+    }, [closeSnackbar, enqueueSnackbar, tabs])
 
     useEffect(() => {
         if (differentArtists > artistLimit) {
-            setWarning()
+            enqueueSnackbar({
+                message:
+                    "Sorry! Your playlist's artist count exceeds the current limit of " +
+                    artistLimit,
+                options: {
+                    key: new Date().getTime() + Math.random(),
+                    variant: "error",
+                    anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "right"
+                    },
+                    action: key => (
+                        <Button onClick={() => closeSnackbar(key)}>
+                            dismiss me
+                        </Button>
+                    )
+                }
+            })
         }
-    }, [differentArtists, setWarning])
+    }, [closeSnackbar, differentArtists, enqueueSnackbar])
 
     useEffect(() => {
         function tick() {
@@ -63,75 +107,84 @@ const PlaylistInfo = props => {
         }
     }, [differentArtists])
 
+    useEffect(() => {
+        return () => {
+            closeSnackbar()
+        }
+    }, [closeSnackbar])
+
     return (
-        <Grid
-            container
-            direction="row"
-            alignItems="center"
-            className={classes.playlist}
-        >
-            <Grid item>
-                <Box height={300} width={300}>
-                    <img
-                        src={playlist.images[0].url}
-                        className={classes.playlistPic}
-                        alt="Playlist"
-                    />
-                </Box>
-            </Grid>
-            <Grid item xs className={classes.playlistInfo}>
-                <h2 className={classes.text}>{album ? "Album" : "Playlist"}</h2>
-                <h1 className={classes.text}>{playlist.name}</h1>
-                <p className={classes.text}>
-                    {album ? (
-                        <React.Fragment>
-                            {playlist.total_tracks} songs
-                        </React.Fragment>
-                    ) : (
-                        <React.Fragment>
-                            Created by {playlist.owner.display_name},{" "}
-                            {playlist.tracks.total} songs
-                        </React.Fragment>
-                    )}
-                </p>
-                {differentArtists < artistLimit && !tabs ? (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={getTabs}
-                        style={{ minWidth: 99 }}
-                    >
-                        {!loading ? (
-                            "Get Tabs"
+        <React.Fragment>
+            <Grid
+                container
+                direction="row"
+                alignItems="center"
+                className={classes.playlist}
+            >
+                <Grid item>
+                    <Box height={300} width={300}>
+                        <img
+                            src={playlist.images[0].url}
+                            className={classes.playlistPic}
+                            alt="Playlist"
+                        />
+                    </Box>
+                </Grid>
+                <Grid item xs className={classes.playlistInfo}>
+                    <h2 className={classes.text}>
+                        {album ? "Album" : "Playlist"}
+                    </h2>
+                    <h1 className={classes.text}>{playlist.name}</h1>
+                    <p className={classes.text}>
+                        {album ? (
+                            <React.Fragment>
+                                {playlist.total_tracks} songs
+                            </React.Fragment>
                         ) : (
-                            <CircularProgress
-                                variant="determinate"
-                                size={26}
-                                color="secondary"
-                                value={progress}
-                            />
+                            <React.Fragment>
+                                Created by {playlist.owner.display_name},{" "}
+                                {playlist.tracks.total} songs
+                            </React.Fragment>
                         )}
-                    </Button>
-                ) : (
-                    <Button
-                        disabled
-                        variant="contained"
-                        color="primary"
-                        style={{ minWidth: 99 }}
-                    >
-                        Get Tabs
-                    </Button>
-                )}
+                    </p>
+                    {differentArtists < artistLimit && !tabs ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={getTabs}
+                            style={{ minWidth: 99 }}
+                        >
+                            {!loading ? (
+                                "Get Tabs"
+                            ) : (
+                                <CircularProgress
+                                    variant="determinate"
+                                    size={26}
+                                    color="secondary"
+                                    value={progress}
+                                />
+                            )}
+                        </Button>
+                    ) : (
+                        <Button
+                            disabled
+                            variant="contained"
+                            color="primary"
+                            style={{ minWidth: 99 }}
+                        >
+                            Get Tabs
+                        </Button>
+                    )}
+                </Grid>
             </Grid>
-        </Grid>
+        </React.Fragment>
     )
 }
 
-
-
-const connectedPlaylistInfo = connect(
-    null,
-    { getTabs, setWarning }
-)(PlaylistInfo)
+const connectedPlaylistInfo = connect(null, {
+    getTabs,
+    enqueueSnackbar,
+    closeSnackbar
+})(PlaylistInfo)
 
 export default withStyles(styles)(connectedPlaylistInfo)

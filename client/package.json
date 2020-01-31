@@ -15,6 +15,7 @@
         "js-cookie": "^2.2.1",
         "node-vibrant": "^3.1.4",
         "nodemon": "^1.19.1",
+        "notistack": "^0.9.7",
         "react": "^16.9.0",
         "react-dom": "^16.9.0",
         "react-lazyload": "^2.6.2",

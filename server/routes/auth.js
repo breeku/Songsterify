@@ -10,6 +10,7 @@ authRouter.post("/login", async (req, res) => {
         res.cookie('accessToken', codeGrant.body["access_token"])
         res.cookie('refreshToken', codeGrant.body["refresh_token"], {httpOnly: true})
         res.sendStatus(200)
+        /* istanbul ignore next */
     } catch (e) {
         console.log(e)
         Sentry.captureException(e);
@@ -24,6 +25,7 @@ authRouter.post("/refresh", async (req, res) => {
         const refreshedToken = await spotifyApi.refreshAccessToken()
         res.cookie('accessToken', refreshedToken.body["access_token"])
         res.sendStatus(201)
+        /* istanbul ignore next */
     } catch (e) {
         console.log(e)
         Sentry.captureException(e);

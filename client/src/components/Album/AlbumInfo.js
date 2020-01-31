@@ -8,7 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress"
 import Box from "@material-ui/core/Box"
 
 import { getTabs } from "../../reducers/trackReducer"
-import { setWarning } from "../../reducers/snackbarReducer"
+import { enqueueSnackbar, closeSnackbar } from "../../reducers/snackbarReducer"
 
 const styles = theme => ({
     root: {},
@@ -31,7 +31,7 @@ const AlbumInfo = props => {
     const [loading, setLoading] = useState(false)
     const [progress, setProgress] = useState(0)
     const tracks = props.tracks.tracks.items
-    const { album, classes, setWarning } = props
+    const { album, classes, enqueueSnackbar, closeSnackbar } = props
     const { differentArtists, tabs } = props.tracks
     const artistLimit = 20
 
@@ -39,16 +39,61 @@ const AlbumInfo = props => {
         props.getTabs({ tracks, id: album.id })
         setLoading(true)
     }
-
+    
     useEffect(() => {
-        if (tabs) setLoading(false)
-    }, [tabs])
+        if (tabs) {
+            enqueueSnackbar({
+                message:
+                    "Found " +
+                    tabs.length +
+                    " tab" +
+                    (tabs.length > 0
+                        ? tabs.length === 1
+                            ? "!"
+                            : "s!"
+                        : "s :("),
+                options: {
+                    key: new Date().getTime() + Math.random(),
+                    autoHideDuration: 1500,
+                    variant: tabs.length > 0 ? "success" : "error",
+                    anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "right"
+                    },
+                    action: key => (
+                        <Button onClick={() => closeSnackbar(key)}>
+                            dismiss me
+                        </Button>
+                    )
+                }
+            })
+            setLoading(false)
+        }
+    }, [closeSnackbar, enqueueSnackbar, tabs])
 
+    /* istanbul ignore next */
     useEffect(() => {
         if (differentArtists > artistLimit) {
-            setWarning()
+            enqueueSnackbar({
+                message:
+                    "Sorry! This album's artist count exceeds the current limit of " +
+                    artistLimit,
+                options: {
+                    key: new Date().getTime() + Math.random(),
+                    variant: "error",
+                    anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "right"
+                    },
+                    action: key => (
+                        <Button onClick={() => closeSnackbar(key)}>
+                            dismiss me
+                        </Button>
+                    )
+                }
+            })
         }
-    }, [differentArtists, setWarning])
+    }, [closeSnackbar, differentArtists, enqueueSnackbar])
 
     useEffect(() => {
         function tick() {
@@ -63,62 +108,71 @@ const AlbumInfo = props => {
         }
     }, [differentArtists])
 
+    useEffect(() => {
+        return () => {
+            closeSnackbar()
+        }
+    }, [closeSnackbar])
+
     return (
-        <Grid
-            container
-            direction="row"
-            alignItems="center"
-            className={classes.album}
-        >
-            <Grid item>
-                <Box height={300} width={300}>
-                    <img
-                        src={album.images[0].url}
-                        className={classes.albumPic}
-                        alt="Album"
-                    />
-                </Box>
+        <React.Fragment>
+            <Grid
+                container
+                direction="row"
+                alignItems="center"
+                className={classes.album}
+            >
+                <Grid item>
+                    <Box height={300} width={300}>
+                        <img
+                            src={album.images[0].url}
+                            className={classes.albumPic}
+                            alt="Album"
+                        />
+                    </Box>
+                </Grid>
+                <Grid item xs className={classes.albumInfo}>
+                    <h2 className={classes.text}>Album</h2>
+                    <h1 className={classes.text}>{album.name}</h1>
+                    <p className={classes.text}>{album.total_tracks} songs</p>
+                    {differentArtists < artistLimit && !tabs ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={getTabs}
+                            style={{ minWidth: 99 }}
+                        >
+                            {!loading ? (
+                                "Get Tabs"
+                            ) : (
+                                <CircularProgress
+                                    variant="determinate"
+                                    size={26}
+                                    color="secondary"
+                                    value={progress}
+                                />
+                            )}
+                        </Button>
+                    ) : (
+                        <Button
+                            disabled
+                            variant="contained"
+                            color="primary"
+                            style={{ minWidth: 99 }}
+                        >
+                            Get Tabs
+                        </Button>
+                    )}
+                </Grid>
             </Grid>
-            <Grid item xs className={classes.albumInfo}>
-                <h2 className={classes.text}>Album</h2>
-                <h1 className={classes.text}>{album.name}</h1>
-                <p className={classes.text}>{album.total_tracks} songs</p>
-                {differentArtists < artistLimit && !tabs ? (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={getTabs}
-                        style={{ minWidth: 99 }}
-                    >
-                        {!loading ? (
-                            "Get Tabs"
-                        ) : (
-                            <CircularProgress
-                                variant="determinate"
-                                size={26}
-                                color="secondary"
-                                value={progress}
-                            />
-                        )}
-                    </Button>
-                ) : (
-                    <Button
-                        disabled
-                        variant="contained"
-                        color="primary"
-                        style={{ minWidth: 99 }}
-                    >
-                        Get Tabs
-                    </Button>
-                )}
-            </Grid>
-        </Grid>
+        </React.Fragment>
     )
 }
 
-const connectedAlbumInfo = connect(
-    null,
-    { getTabs, setWarning }
-)(AlbumInfo)
+const connectedAlbumInfo = connect(null, {
+    getTabs,
+    enqueueSnackbar,
+    closeSnackbar
+})(AlbumInfo)
 
 export default withStyles(styles)(connectedAlbumInfo)

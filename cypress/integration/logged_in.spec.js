@@ -12,7 +12,7 @@ describe("Logged in", function() {
 
     beforeEach(function() {
         cy.visit("/")
-        
+
         cy.get("h2").should("contain", "spotttm")
 
         cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
@@ -137,18 +137,9 @@ describe("Logged in", function() {
 
             cy.url().should("include", "/playlist/")
 
-            // Notification
-            cy.get("div:nth-child(3) > div").should("contain", "Sorry!")
-
             cy.get("div:nth-child(2) > div > div > button").should(
                 "be.disabled"
             )
-
-            // Close notification
-
-            cy.get(
-                "div:nth-child(3) > div > div > div.MuiSnackbarContent-action > button"
-            ).click({ force: true })
         })
 
         it("Returns tabs from a playlist", function() {
@@ -162,6 +153,10 @@ describe("Logged in", function() {
             cy.get(
                 "button.MuiButtonBase-root:nth-child(4) > span:nth-child(1)"
             ).click()
+
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-message"
+            ).should("contain", "Found")
 
             // First should be green
             cy.get("main > div:nth-child(2) > table > tbody > tr")
@@ -212,12 +207,62 @@ describe("Logged in", function() {
                 "button.MuiButtonBase-root:nth-child(4) > span:nth-child(1)"
             ).click()
 
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-message"
+            ).should("contain", "Found")
+
             // Check that color changes
             cy.get("main > div:nth-child(2) > table > tbody > tr")
                 .eq(0)
                 .should("contain", "1")
                 .should("have.css", "background-color")
                 .and("match", /^rgba.(0, 0, 0, 0.6.)|rgba.(0, 220, 0, 0.5.)/)
+        })
+    })
+
+    describe("Notifications", function() {
+        it("Disappears when on unmount", function() {
+            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+                .contains("cypress_big")
+                .click({ force: true })
+
+            cy.url().should("include", "/playlist/")
+
+            // Notification
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-message"
+            ).should("contain", "Sorry!")
+
+            cy.get(
+                "div > ul > a:nth-child(3) > div > div.MuiListItemText-root > span"
+            ).click()
+
+            cy.url().should("include", "/about")
+
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-message"
+            ).should("not.exist")
+        })
+
+        it("Disappears on dismiss", function() {
+            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+                .contains("cypress_big")
+                .click({ force: true })
+
+            cy.url().should("include", "/playlist/")
+
+            // Notification
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-message"
+            ).should("contain", "Sorry!")
+
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-action > button > span.MuiButton-label"
+            ).click({ force: true })
+
+            cy.get(
+                "div > div > div > div > div > div.MuiSnackbarContent-message"
+            ).should("not.exist")
         })
     })
 
