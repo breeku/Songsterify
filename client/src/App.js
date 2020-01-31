@@ -97,7 +97,7 @@ const App = props => {
         if (tokens) {
             if (tokens.accessToken) {
                 return null
-            } else {
+            } else if (tokens.accessToken === null) {
                 return <Redirect to="/login" />
             }
         }

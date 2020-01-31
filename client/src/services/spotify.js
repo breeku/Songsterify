@@ -1,9 +1,7 @@
 import axios from "axios"
 import { refresh } from "./auth"
 import Cookies from "js-cookie"
-import store from "../store"
 const baseUrl = "/api/spotify/"
-
 let isRefreshing = false
 let failedQueue = []
 let cookie = null
@@ -18,13 +16,6 @@ const processQueue = (error, token = null) => { // https://gist.github.com/Godof
     })
 
     failedQueue = []
-}
-
-const refreshToken = token => {
-    return {
-        type: "REFRESH_TOKEN",
-        data: token
-    }
 }
 
 axios.interceptors.request.use(
@@ -77,11 +68,6 @@ axios.interceptors.response.use(
                         data: JSON.stringify(originalData)
                     }
                     processQueue(null, cookie)
-
-                    setTimeout(() => { // need to delay the refresh to avoid duplicate requests due to useEffect
-                        store.dispatch(refreshToken({ accessToken: cookie }))
-                        cookie = null
-                    }, 1000)
 
                     isRefreshing = false
                     return axios(originalRequest)

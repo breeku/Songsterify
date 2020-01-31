@@ -4,9 +4,6 @@ describe("Logged in", function() {
     before(function() {
         cy.setCookie("accessToken", "null")
         cy.setCookie("refreshToken", Cypress.env("refreshToken"))
-        cy.visit("/")
-
-        cy.get("h2").should("contain", "spotttm")
     })
 
     after(function() {
@@ -15,6 +12,14 @@ describe("Logged in", function() {
 
     beforeEach(function() {
         cy.visit("/")
+        
+        cy.get("h2").should("contain", "spotttm")
+
+        cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
+            "contain",
+            "cypress"
+        )
+
         Cypress.Cookies.preserveOnce("accessToken", "refreshToken")
     })
 
@@ -28,7 +33,6 @@ describe("Logged in", function() {
         })
 
         it("Can visit search", function() {
-            cy.visit("/")
             cy.get(
                 "div > ul > a:nth-child(2) > div > div.MuiListItemText-root > span"
             ).click()
@@ -100,7 +104,6 @@ describe("Logged in", function() {
 
     describe("About", function() {
         it("Can visit about", function() {
-            cy.visit("/")
             cy.get("h2").should("contain", "spotttm")
 
             cy.get(
@@ -115,7 +118,6 @@ describe("Logged in", function() {
 
     describe("Recently played", function() {
         it("Can visit a recent played album", function() {
-            cy.visit("/")
             cy.get("h2").should("contain", "spotttm")
 
             // Click the first album
@@ -223,6 +225,33 @@ describe("Logged in", function() {
         it("Refreshes old accesstoken", function() {
             cy.get("h2").should("contain", "spotttm")
 
+            cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
+                "contain",
+                "cypress"
+            )
+
+            // // // // // // // // //
+
+            cy.window()
+                .its("store")
+                .invoke("dispatch", {
+                    type: "SET_TOKEN",
+                    data: { accessToken: "invalid" }
+                })
+
+            cy.clearCookie("accesstoken")
+
+            cy.reload()
+
+            cy.get("h2").should("contain", "spotttm")
+
+            cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
+                "contain",
+                "cypress"
+            )
+
+            // // // // // // // // //
+
             cy.window()
                 .its("store")
                 .invoke("dispatch", {
@@ -237,6 +266,29 @@ describe("Logged in", function() {
             cy.url().should("include", "/album/")
 
             cy.get("h2").should("contain", "Album")
+
+            // // // // // // // // //
+
+            cy.window()
+                .its("store")
+                .invoke("dispatch", {
+                    type: "SET_TOKEN",
+                    data: { accessToken: "invalid" }
+                })
+
+            cy.clearCookie("accesstoken")
+
+            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+                .contains("cypress_small")
+                .click({ force: true })
+
+            cy.url().should("include", "/playlist/")
+
+            cy.get("h2").should("contain", "Playlist")
+
+            cy.wait(1000)
+
+            cy.get("h2").should("contain", "Playlist")
         })
     })
 
