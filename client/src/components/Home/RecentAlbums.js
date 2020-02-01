@@ -11,6 +11,9 @@ const styles = theme => ({
     },
     playlistPic: {
         boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);"
+    },
+    container: {
+        maxWidth: "100%"
     }
 })
 
@@ -19,9 +22,9 @@ const RecentAlbums = props => {
     const { classes, tracks } = props
 
     return (
-        <div style={{width: "100%"}}>
+        <React.Fragment>
         <h1 style={{textAlign: "center"}}>Recently played</h1>
-        <Grid container spacing={3} justify="center">
+        <Grid className={classes.container} container spacing={3} justify="center">
             {Object.keys(tracks).map(id => (
                 <Grid item key={id}>
                     <Link className={classes.a} to={{pathname: "/album/" + tracks[id].id}}>
@@ -30,7 +33,7 @@ const RecentAlbums = props => {
                 </Grid>
             ))}
         </Grid>
-        </div>
+        </React.Fragment>
     )
 }
 

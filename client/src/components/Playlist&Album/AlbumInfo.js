@@ -54,7 +54,7 @@ const AlbumInfo = props => {
                         : "s :("),
                 options: {
                     key: new Date().getTime() + Math.random(),
-                    autoHideDuration: 1500,
+                    autoHideDuration: 2500,
                     variant: tabs.length > 0 ? "success" : "error",
                     anchorOrigin: {
                         vertical: "bottom",

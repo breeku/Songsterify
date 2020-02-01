@@ -13,10 +13,7 @@ import PerfectScrollbar from "react-perfect-scrollbar"
 import "react-perfect-scrollbar/dist/css/styles.css"
 
 const styles = theme => ({
-    a: {
-        color: "whitesmoke",
-        textDecoration: "none"
-    }
+    a: theme.aNoDecoration
 })
 
 const PlaylistList = props => {

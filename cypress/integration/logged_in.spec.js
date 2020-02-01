@@ -1,13 +1,20 @@
 /// <reference types="Cypress" />
 /* eslint-disable no-undef */
 describe("Logged in", function() {
+    const Home =
+        "div > div > ul > a:nth-child(1) > div > div.MuiListItemText-root"
+    const Search =
+        "div > div > ul > a:nth-child(2) > div > div.MuiListItemText-root"
+    const About =
+        "div > div > ul > a:nth-child(3) > div > div.MuiListItemText-root"
+    const firstImage = "div > div:nth-child(1) > a > img"
+    const notificationMessage =
+        "div > div > div > div > div > div.MuiSnackbarContent-message"
+    const playlistList = "div > div.scrollbar-container.ps.ps--active-y"
+
     before(function() {
         cy.setCookie("accessToken", "null")
         cy.setCookie("refreshToken", Cypress.env("refreshToken"))
-    })
-
-    after(function() {
-        cy.clearCookies()
     })
 
     beforeEach(function() {
@@ -15,7 +22,7 @@ describe("Logged in", function() {
 
         cy.get("h2").should("contain", "spotttm")
 
-        cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
+        cy.get(playlistList).should(
             "contain",
             "cypress"
         )
@@ -23,19 +30,15 @@ describe("Logged in", function() {
         Cypress.Cookies.preserveOnce("accessToken", "refreshToken")
     })
 
+    after(function() {
+        cy.clearCookies()
+    })
+
     describe("Search", function() {
         beforeEach(function() {
-            cy.get(
-                "div > ul > a:nth-child(2) > div > div.MuiListItemText-root > span"
-            ).click()
-
-            cy.url().should("include", "/search")
-        })
-
-        it("Can visit search", function() {
-            cy.get(
-                "div > ul > a:nth-child(2) > div > div.MuiListItemText-root > span"
-            ).click()
+            cy.get(Search)
+                .eq(0)
+                .click()
 
             cy.url().should("include", "/search")
         })
@@ -106,9 +109,9 @@ describe("Logged in", function() {
         it("Can visit about", function() {
             cy.get("h2").should("contain", "spotttm")
 
-            cy.get(
-                "div > ul > a:nth-child(3) > div > div.MuiListItemText-root > span"
-            ).click()
+            cy.get(About)
+                .eq(0)
+                .click()
 
             cy.url().should("include", "/about")
 
@@ -121,7 +124,23 @@ describe("Logged in", function() {
             cy.get("h2").should("contain", "spotttm")
 
             // Click the first album
-            cy.get("div > div:nth-child(1) > a > img").click()
+            cy.get(firstImage).click()
+
+            cy.url().should("include", "/album/")
+
+            cy.get("h2").should("contain", "Album")
+        })
+    })
+
+    describe("Playlist", function() {
+        it("Can visit a album from playlist", function() {
+            cy.get(playlistList)
+            .contains("cypress_small")
+            .click({ force: true })
+
+            cy.url().should("include", "/playlist/")
+
+            cy.get("table > tbody > tr:nth-child(1) > td:nth-child(4) > a").click()
 
             cy.url().should("include", "/album/")
 
@@ -131,19 +150,19 @@ describe("Logged in", function() {
 
     describe("Tabs", function() {
         it("Cant get tabs if too many diff artists in playlist", function() {
-            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+            cy.get(playlistList)
                 .contains("cypress_big")
                 .click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
-            cy.get("div:nth-child(2) > div > div > button").should(
+            cy.get("div > div > button").should(
                 "be.disabled"
             )
         })
 
         it("Returns tabs from a playlist", function() {
-            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+            cy.get(playlistList)
                 .contains("cypress_small")
                 .click({ force: true })
 
@@ -154,26 +173,24 @@ describe("Logged in", function() {
                 "button.MuiButtonBase-root:nth-child(4) > span:nth-child(1)"
             ).click()
 
-            cy.get(
-                "div > div > div > div > div > div.MuiSnackbarContent-message"
-            ).should("contain", "Found")
+            cy.get(notificationMessage).should("contain", "Found")
 
             // First should be green
-            cy.get("main > div:nth-child(2) > table > tbody > tr")
+            cy.get("table > tbody > tr:nth-child(1)")
                 .eq(0)
                 .should("contain", "1")
                 .should("have.css", "background-color")
                 .and("eq", "rgba(0, 220, 0, 0.5)")
 
             // Second should be black
-            cy.get("main > div:nth-child(2) > table > tbody > tr")
-                .eq(1)
+            cy.get("table > tbody > tr:nth-child(2)")
+                .eq(0)
                 .should("contain", "2")
                 .should("have.css", "background-color")
                 .and("eq", "rgba(0, 0, 0, 0.6)")
 
             // Can click on first and see tab link
-            cy.get("main > div:nth-child(2) > table > tbody > tr")
+            cy.get("table > tbody > tr:nth-child(1)")
                 .eq(0)
                 .click()
 
@@ -198,7 +215,7 @@ describe("Logged in", function() {
         })
 
         it("Get tabs from a album", function() {
-            cy.get("div > div:nth-child(1) > a > img").click()
+            cy.get(firstImage).click()
 
             cy.url().should("include", "/album/")
 
@@ -207,12 +224,10 @@ describe("Logged in", function() {
                 "button.MuiButtonBase-root:nth-child(4) > span:nth-child(1)"
             ).click()
 
-            cy.get(
-                "div > div > div > div > div > div.MuiSnackbarContent-message"
-            ).should("contain", "Found")
+            cy.get(notificationMessage).should("contain", "Found")
 
             // Check that color changes
-            cy.get("main > div:nth-child(2) > table > tbody > tr")
+            cy.get("table > tbody > tr:nth-child(1)")
                 .eq(0)
                 .should("contain", "1")
                 .should("have.css", "background-color")
@@ -221,48 +236,48 @@ describe("Logged in", function() {
     })
 
     describe("Notifications", function() {
-        it("Disappears when on unmount", function() {
-            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+        it("Disappears on unmount", function() {
+            cy.get(playlistList)
                 .contains("cypress_big")
                 .click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
             // Notification
-            cy.get(
-                "div > div > div > div > div > div.MuiSnackbarContent-message"
-            ).should("contain", "Sorry!")
+            cy.get(notificationMessage).should("contain", "Sorry!")
 
-            cy.get(
-                "div > ul > a:nth-child(3) > div > div.MuiListItemText-root > span"
-            ).click()
+            cy.get(About)
+                .eq(0)
+                .click()
 
             cy.url().should("include", "/about")
 
-            cy.get(
-                "div > div > div > div > div > div.MuiSnackbarContent-message"
-            ).should("not.exist")
+            cy.get(notificationMessage).should("not.exist")
         })
 
         it("Disappears on dismiss", function() {
-            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+            cy.get(playlistList)
                 .contains("cypress_big")
                 .click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
             // Notification
-            cy.get(
-                "div > div > div > div > div > div.MuiSnackbarContent-message"
-            ).should("contain", "Sorry!")
+            cy.get(notificationMessage).should("contain", "Sorry!")
 
             cy.get(
                 "div > div > div > div > div > div.MuiSnackbarContent-action > button > span.MuiButton-label"
             ).click({ force: true })
 
-            cy.get(
-                "div > div > div > div > div > div.MuiSnackbarContent-message"
-            ).should("not.exist")
+            cy.get(notificationMessage).should("not.exist")
+        })
+    })
+
+    describe("Responsive", function() {
+        it("Appbar hides", function() {
+            cy.viewport(599, 670)
+
+            cy.get("header > div > button").eq(0).click()
         })
     })
 
@@ -270,7 +285,7 @@ describe("Logged in", function() {
         it("Refreshes old accesstoken", function() {
             cy.get("h2").should("contain", "spotttm")
 
-            cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
+            cy.get(playlistList).should(
                 "contain",
                 "cypress"
             )
@@ -290,7 +305,7 @@ describe("Logged in", function() {
 
             cy.get("h2").should("contain", "spotttm")
 
-            cy.get("div > div.scrollbar-container.ps.ps--active-y").should(
+            cy.get(playlistList).should(
                 "contain",
                 "cypress"
             )
@@ -306,7 +321,7 @@ describe("Logged in", function() {
 
             cy.clearCookie("accesstoken")
 
-            cy.get("div > div:nth-child(1) > a > img").click()
+            cy.get(firstImage).click()
 
             cy.url().should("include", "/album/")
 
@@ -323,7 +338,7 @@ describe("Logged in", function() {
 
             cy.clearCookie("accesstoken")
 
-            cy.get("div > div.scrollbar-container.ps.ps--active-y")
+            cy.get(playlistList)
                 .contains("cypress_small")
                 .click({ force: true })
 

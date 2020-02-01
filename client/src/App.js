@@ -10,8 +10,7 @@ import { connect } from "react-redux"
 import Main from "./components/Home/Home"
 import Callback from "./components/Callback"
 import Login from "./components/Login"
-import Playlist from "./components/Playlist/Playlist"
-import Album from "./components/Album/Album"
+import PlaylistorAlbum from "./components/Playlist&Album/PlaylistorAlbum"
 import Appbar from "./components/Appbar/Appbar"
 import About from "./components/About/About"
 import Search from "./components/Search/Search"
@@ -39,11 +38,11 @@ const routes = [
     },
     {
         path: "/playlist/:id",
-        main: () => <Playlist />
+        main: () => <PlaylistorAlbum />
     },
     {
         path: "/album/:id",
-        main: () => <Album />
+        main: () => <PlaylistorAlbum />
     },
     {
         path: "/about/",

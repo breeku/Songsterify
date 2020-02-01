@@ -31,7 +31,7 @@ jobs:
               uses: cypress-io/github-action@v1
               with:
                   env: refreshToken=${{ secrets.refreshToken }}
-                  config-file: gh_actions.cypress.json
+                  config-file: cypress.json
                   wait-on: "http://localhost:3000"
                   # wait for 2 minutes for the server to respond
                   wait-on-timeout: 120

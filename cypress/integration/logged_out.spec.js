@@ -21,7 +21,7 @@ describe("Logged out", function() {
     it("Can visit about", function() {
         cy.get(
             "div > ul > a:nth-child(3) > div > div.MuiListItemText-root > span"
-        ).click()
+        ).eq(0).click()
 
         cy.url().should("include", "/about")
 

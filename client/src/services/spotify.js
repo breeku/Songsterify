@@ -49,8 +49,8 @@ axios.interceptors.response.use(
                         }
                         return axios(originalRequest)
                     })
-                    /* istanbul ignore next */
                     .catch(err => {
+                        /* istanbul ignore next */
                         return Promise.reject(err)
                     })
             }
@@ -75,8 +75,8 @@ axios.interceptors.response.use(
                     isRefreshing = false
                     return axios(originalRequest)
                 }
-                /* istanbul ignore next */
             } catch (e) {
+                /* istanbul ignore next */
                 processQueue(e, null)
 
                 isRefreshing = false

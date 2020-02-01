@@ -18,7 +18,7 @@ import Tab from "./Tab/Tab"
 const styles = theme => ({
     root: {
         marginTop: "1em",
-        width: "100%"
+        width: "100%",
     },
     text: {
         color: "whitesmoke"
