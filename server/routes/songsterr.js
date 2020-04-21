@@ -1,13 +1,12 @@
 const Sentry = require('../sentry');
-const axios = require("axios")
 const songsterrRouter = require("express").Router()
-const API = "https://www.songsterr.com/api/songs?pattern="
 const spotifyApi = require("../spotifySetup")
 const slowDown = require("express-slow-down")
+const { songsterrSearch } = require("songsterr-api-node")
 
 const songsterrLimiter = slowDown({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    delayAfter: 10, // allow 5 requests to go at full-speed, effectively you can lookup 10 playlists. then...
+    windowMs: 3 * 60 * 1000, // 3 minutes
+    delayAfter: 10, // allow 10 requests to go at full-speed, effectively you can lookup 10 playlists. then...
     delayMs: 250 // 6th request has a 250ms delay, 7th has a 500ms delay, 8th gets 750ms, etc
 })
 
@@ -78,8 +77,8 @@ const getTabs = async tracks => {
         return
     }
     for (artist of newArtists) {
-        const response = await axios.get(API + artist.name + " " + "&size=200")
-        for (tab of response.data) {
+        const response = await songsterrSearch(artist.name)
+        for (tab of response) {
             for (track of newTracks) {
                 if (tab.title.toLowerCase() === track.name.toLowerCase()) {
                     const obj = {
@@ -90,7 +89,7 @@ const getTabs = async tracks => {
                 }
             }
         }
-        if (newArtists.length > 1) await sleep(500)
+        if (newArtists.length > 1) await sleep(250)
     }
     return tabs
 }

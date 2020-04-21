@@ -182,13 +182,6 @@ describe("Logged in", function() {
                 .should("have.css", "background-color")
                 .and("eq", "rgba(0, 220, 0, 0.5)")
 
-            // Second should be black
-            cy.get("table > tbody > tr:nth-child(2)")
-                .eq(0)
-                .should("contain", "2")
-                .should("have.css", "background-color")
-                .and("eq", "rgba(0, 0, 0, 0.6)")
-
             // Can click on first and see tab link
             cy.get("table > tbody > tr:nth-child(1)")
                 .eq(0)
@@ -199,19 +192,6 @@ describe("Logged in", function() {
             cy.get(
                 "div.MuiDialogContent-root > a > span.MuiButton-label"
             ).should("contain", "Open")
-
-            cy.get("div.MuiButtonBase-root:nth-child(3)").should(
-                "contain",
-                "Guitar"
-            )
-
-            cy.get(
-                "div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > span:nth-child(1)"
-            ).should("contain", "Difficulty")
-
-            cy.get(
-                "div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > div:nth-child(1)"
-            ).should("contain", "Tuning")
         })
 
         it("Get tabs from a album", function() {
