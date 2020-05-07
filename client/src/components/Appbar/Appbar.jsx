@@ -66,8 +66,13 @@ const Appbar = props => {
     const { classes, tokens } = props
     const [mobileOpen, setMobileOpen] = useState(false)
 
-    const redirectUrl =
-        "https://accounts.spotify.com/authorize?client_id=aef42b48cc74441299b7b1ac9b42a779&response_type=code&redirect_uri=http://localhost:3000/callback/&scope=user-read-recently-played%20user-top-read"
+    const currentUrl = window.location.origin
+    const redirectUrl = currentUrl + "/callback/"
+    const scopes = "&scope=user-read-recently-played%20user-top-read"
+    const authUrl =
+        "https://accounts.spotify.com/authorize?client_id=aef42b48cc74441299b7b1ac9b42a779&response_type=code&redirect_uri=" +
+        redirectUrl +
+        scopes
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen)
@@ -149,7 +154,7 @@ const Appbar = props => {
                                 Logout
                             </Button>
                         ) : (
-                            <Button color="inherit" href={redirectUrl}>
+                            <Button color="inherit" href={authUrl}>
                                 Login
                             </Button>
                         )}
