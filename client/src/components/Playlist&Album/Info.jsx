@@ -10,29 +10,28 @@ import Box from "@material-ui/core/Box"
 import { getTabs } from "../../reducers/trackReducer"
 import { enqueueSnackbar, closeSnackbar } from "../../reducers/snackbarReducer"
 
-const styles = theme => ({
+const styles = (theme) => ({
     root: {},
     playlist: {
-        paddingLeft: 20
+        paddingLeft: 20,
     },
     playlistPic: {
         maxWidth: 300,
-        boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);"
+        boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);",
     },
     playlistInfo: {
-        paddingLeft: 20
+        paddingLeft: 20,
     },
     text: {
-        color: "whitesmoke"
-    }
+        color: "whitesmoke",
+    },
 })
 
-const PlaylistInfo = props => {
+const Info = (props) => {
     const [loading, setLoading] = useState(false)
-    const [progress, setProgress] = useState(0)
     const tracks = props.tracks.tracks.items
-    const { playlist, classes, enqueueSnackbar, closeSnackbar } = props
-    const { album, differentArtists, tabs } = props.tracks
+    const { type, playlist, classes, enqueueSnackbar, closeSnackbar } = props
+    const { differentArtists, tabs } = props.tracks
     const artistLimit = 20
 
     const getTabs = async () => {
@@ -58,14 +57,14 @@ const PlaylistInfo = props => {
                     variant: tabs.length > 0 ? "success" : "error",
                     anchorOrigin: {
                         vertical: "bottom",
-                        horizontal: "right"
+                        horizontal: "right",
                     },
-                    action: key => (
+                    action: (key) => (
                         <Button onClick={() => closeSnackbar(key)}>
                             dismiss me
                         </Button>
-                    )
-                }
+                    ),
+                },
             })
             setLoading(false)
         }
@@ -75,37 +74,26 @@ const PlaylistInfo = props => {
         if (differentArtists > artistLimit) {
             enqueueSnackbar({
                 message:
-                    "Sorry! Your playlist's artist count exceeds the current limit of " +
+                    "Sorry! Your " +
+                    (type === "playlist" ? "playlist" : "album") +
+                    "'s artist count exceeds the current limit of " +
                     artistLimit,
                 options: {
                     key: new Date().getTime() + Math.random(),
                     variant: "error",
                     anchorOrigin: {
                         vertical: "bottom",
-                        horizontal: "right"
+                        horizontal: "right",
                     },
-                    action: key => (
+                    action: (key) => (
                         <Button onClick={() => closeSnackbar(key)}>
                             dismiss me
                         </Button>
-                    )
-                }
+                    ),
+                },
             })
         }
-    }, [closeSnackbar, differentArtists, enqueueSnackbar])
-
-    useEffect(() => {
-        function tick() {
-            // reset when reaching 100%
-            setProgress(oldProgress =>
-                oldProgress >= 100 ? 0 : oldProgress + 1
-            )
-        }
-        const timer = setInterval(tick, 8 * differentArtists)
-        return () => {
-            clearInterval(timer)
-        }
-    }, [differentArtists])
+    }, [closeSnackbar, differentArtists, enqueueSnackbar, playlist, type])
 
     useEffect(() => {
         return () => {
@@ -126,24 +114,24 @@ const PlaylistInfo = props => {
                         <img
                             src={playlist.images[0].url}
                             className={classes.playlistPic}
-                            alt="Playlist"
+                            alt={type === "playlist" ? "Playlist" : "Album"}
                         />
                     </Box>
                 </Grid>
                 <Grid item xs className={classes.playlistInfo}>
                     <h2 className={classes.text}>
-                        {album ? "Album" : "Playlist"}
+                        {type === "playlist" ? "Playlist" : "Album"}
                     </h2>
                     <h1 className={classes.text}>{playlist.name}</h1>
                     <p className={classes.text}>
-                        {album ? (
-                            <React.Fragment>
-                                {playlist.total_tracks} songs
-                            </React.Fragment>
-                        ) : (
+                        {type === "playlist" ? (
                             <React.Fragment>
                                 Created by {playlist.owner.display_name},{" "}
                                 {playlist.tracks.total} songs
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                {playlist.total_tracks} songs
                             </React.Fragment>
                         )}
                     </p>
@@ -157,12 +145,7 @@ const PlaylistInfo = props => {
                             {!loading ? (
                                 "Get Tabs"
                             ) : (
-                                <CircularProgress
-                                    variant="determinate"
-                                    size={26}
-                                    color="secondary"
-                                    value={progress}
-                                />
+                                <CircularProgress size={26} color="secondary" />
                             )}
                         </Button>
                     ) : (
@@ -181,10 +164,10 @@ const PlaylistInfo = props => {
     )
 }
 
-const connectedPlaylistInfo = connect(null, {
+const connectedInfo = connect(null, {
     getTabs,
     enqueueSnackbar,
-    closeSnackbar
-})(PlaylistInfo)
+    closeSnackbar,
+})(Info)
 
-export default withStyles(styles)(connectedPlaylistInfo)
+export default withStyles(styles)(connectedInfo)

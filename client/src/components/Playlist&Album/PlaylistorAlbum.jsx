@@ -5,8 +5,7 @@ import { withRouter } from "react-router-dom"
 import { withStyles } from "@material-ui/core/styles"
 
 import TrackTable from "./TrackTable"
-import PlaylistInfo from "./PlaylistInfo"
-import AlbumInfo from "./AlbumInfo"
+import Info from "./Info"
 import SkeletonPlaylist from "../Skeletons/SkeletonPlaylist"
 
 import getBackgroundColor from "../../utils/getBackgroundColor"
@@ -130,20 +129,21 @@ const PlaylistorAlbum = props => {
         >
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                {type === "playlist" ? (
-                    <React.Fragment>
-                        {playlist &&
-                        playlist.id === id &&
+                <React.Fragment>
+                        {((playlist &&
+                        playlist.id === id) || 
+                        (album && album.id === id)) &&
                         tracks &&
                         tracks[id] &&
                         bg ? (
                             <React.Fragment>
-                                <PlaylistInfo
-                                    playlist={playlist}
+                                <Info
+                                    type={type}
+                                    playlist={type === "playlist" ? playlist : album}
                                     tracks={tracks[id]}
                                 />
                                 <TrackTable
-                                    playlist={playlist}
+                                    playlist={type === "playlist" ? playlist : album}
                                     tracks={tracks[id]}
                                 />
                             </React.Fragment>
@@ -151,25 +151,6 @@ const PlaylistorAlbum = props => {
                             <SkeletonPlaylist />
                         )}
                     </React.Fragment>
-                ) : (
-                    <React.Fragment>
-                        {album &&
-                        album.id === id &&
-                        tracks &&
-                        tracks[id] &&
-                        bg ? (
-                            <React.Fragment>
-                                <AlbumInfo album={album} tracks={tracks[id]} />
-                                <TrackTable
-                                    playlist={album}
-                                    tracks={tracks[id]}
-                                />
-                            </React.Fragment>
-                        ) : (
-                            <SkeletonPlaylist />
-                        )}
-                    </React.Fragment>
-                )}
             </main>
         </div>
     )
