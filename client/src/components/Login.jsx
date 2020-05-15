@@ -8,23 +8,23 @@ import { Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
         backgroundImage: "linear-gradient(rgb(56, 64, 103), rgb(6, 9, 10) 85%)",
         width: "100%",
-        height: "100vh"
+        height: "100vh",
     },
     toolbar: theme.mixins.toolbar,
     content: {
         marginLeft: 300,
         flexGrow: 1,
         padding: theme.spacing(3),
-        color: "whitesmoke"
-    }
+        color: "whitesmoke",
+    },
 }))
 
-const Login = props => {
+const Login = (props) => {
     const { tokens } = props
     const currentUrl = window.location.origin
     const classes = useStyles()
@@ -64,15 +64,12 @@ const Login = props => {
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        tokens: state.tokens
+        tokens: state.tokens,
     }
 }
 
-const ConnectedLogin = connect(
-    mapStateToProps,
-    null
-)(Login)
+const ConnectedLogin = connect(mapStateToProps, null)(Login)
 
 export default ConnectedLogin

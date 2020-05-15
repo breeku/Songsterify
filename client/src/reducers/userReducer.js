@@ -8,8 +8,8 @@ const userReducer = (state = null, action) => {
     }
 }
 
-export const getUser = obj => {
-    return async dispatch => {
+export const getUser = (obj) => {
+    return async (dispatch) => {
         const response = await spotifyService.getUser(obj)
         dispatch({ type: "SET_USER", data: response })
     }

@@ -6,7 +6,7 @@ import { connect } from "react-redux"
 import { setToken } from "../reducers/authReducer"
 
 /* istanbul ignore next */
-const Callback = props => {
+const Callback = (props) => {
     const code = props.location.search.slice(6)
 
     useEffect(() => {
@@ -19,17 +19,10 @@ const Callback = props => {
             }
         }
         getToken()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [code])
 
-    return (
-        null
-    )
+    return null
 }
 
-export default withRouter(
-    connect(
-        null,
-        { setToken }
-    )(Callback)
-)
+export default withRouter(connect(null, { setToken })(Callback))

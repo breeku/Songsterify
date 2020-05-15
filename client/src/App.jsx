@@ -3,7 +3,7 @@ import {
     BrowserRouter as Router,
     Route,
     Redirect,
-    Switch
+    Switch,
 } from "react-router-dom"
 import { connect } from "react-redux"
 
@@ -25,38 +25,38 @@ const routes = [
     {
         path: "/",
         exact: true,
-        main: () => <Main />
+        main: () => <Main />,
     },
     {
         path: "/login/",
         exact: true,
-        main: () => <Login />
+        main: () => <Login />,
     },
     {
         path: "/callback/",
-        main: () => <Callback />
+        main: () => <Callback />,
     },
     {
         path: "/playlist/:id",
-        main: () => <PlaylistorAlbum />
+        main: () => <PlaylistorAlbum />,
     },
     {
         path: "/album/:id",
-        main: () => <PlaylistorAlbum />
+        main: () => <PlaylistorAlbum />,
     },
     {
         path: "/about/",
         exact: true,
-        main: () => <About />
+        main: () => <About />,
     },
     {
         path: "/search/",
         exact: true,
-        main: () => <Search />
-    }
+        main: () => <Search />,
+    },
 ]
 
-const App = props => {
+const App = (props) => {
     const {
         tokens,
         setToken,
@@ -65,7 +65,7 @@ const App = props => {
         initializePlaylists,
         playlists,
         user,
-        getUser
+        getUser,
     } = props
 
     useEffect(() => {
@@ -106,7 +106,7 @@ const App = props => {
     return (
         <React.Fragment>
             <Router>
-                <Notifier/>
+                <Notifier />
                 <TokenRouting />
                 <Appbar />
                 <Switch>
@@ -124,13 +124,13 @@ const App = props => {
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         tokens: state.tokens,
         playlists: state.playlists,
         recent: state.recent,
         albums: state.albums,
-        user: state.user
+        user: state.user,
     }
 }
 
@@ -138,12 +138,9 @@ const mapDispatchToProps = {
     setToken,
     getRecentAlbums,
     initializePlaylists,
-    getUser
+    getUser,
 }
 
-const ConnectedApp = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(App)
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 
 export default ConnectedApp

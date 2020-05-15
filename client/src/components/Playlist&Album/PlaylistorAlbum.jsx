@@ -14,19 +14,19 @@ import {
     setBg,
     clearTracks,
     getTracks,
-    getAlbum
+    getAlbum,
 } from "../../reducers/trackReducer"
 
-const styles = theme => ({
+const styles = (theme) => ({
     root: {
         ...theme.root,
         display: "block",
     },
     content: theme.content,
-    toolbar: theme.mixins.toolbar
+    toolbar: theme.mixins.toolbar,
 })
 
-const PlaylistorAlbum = props => {
+const PlaylistorAlbum = (props) => {
     const [playlist, setPlaylist] = useState(null)
     const [album, setAlbum] = useState(null)
     const [bg, setBackground] = useState(
@@ -41,7 +41,7 @@ const PlaylistorAlbum = props => {
         getTracks,
         albums,
         getAlbum,
-        setBg
+        setBg,
     } = props
 
     const type =
@@ -58,12 +58,12 @@ const PlaylistorAlbum = props => {
                 if (type === "playlist") {
                     getTracks({
                         id,
-                        accessToken: tokens.accessToken
+                        accessToken: tokens.accessToken,
                     })
                 } else {
                     getAlbum({
                         id,
-                        accessToken: tokens.accessToken
+                        accessToken: tokens.accessToken,
                     })
                 }
             }
@@ -80,7 +80,7 @@ const PlaylistorAlbum = props => {
         if (type === "playlist") {
             if (playlists && !location.state) {
                 // linked from playlistlist
-                setPlaylist(playlists.playlists.items.find(x => x.id === id))
+                setPlaylist(playlists.playlists.items.find((x) => x.id === id))
             } else if (location && location.state) {
                 // linked from tracktable link
                 setPlaylist(location.state.playlist)
@@ -109,12 +109,15 @@ const PlaylistorAlbum = props => {
                     type === "playlist"
                         ? await getBackgroundColor(playlist.images[0].url)
                         : await getBackgroundColor(album.images[0].url),
-                id: type === "playlist" ? playlist.id : album.id
+                id: type === "playlist" ? playlist.id : album.id,
             })
         }
         if (
-            (album ||
-            playlist) && id && tracks && tracks[id] && !tracks[id].bg
+            (album || playlist) &&
+            id &&
+            tracks &&
+            tracks[id] &&
+            !tracks[id].bg
         ) {
             setBackgroundColor()
         }
@@ -124,44 +127,47 @@ const PlaylistorAlbum = props => {
         <div
             className={classes.root}
             style={{
-                backgroundImage: bg
+                backgroundImage: bg,
             }}
         >
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <React.Fragment>
-                        {((playlist &&
-                        playlist.id === id) || 
+                    {((playlist && playlist.id === id) ||
                         (album && album.id === id)) &&
-                        tracks &&
-                        tracks[id] &&
-                        bg ? (
-                            <React.Fragment>
-                                <Info
-                                    type={type}
-                                    playlist={type === "playlist" ? playlist : album}
-                                    tracks={tracks[id]}
-                                />
-                                <TrackTable
-                                    playlist={type === "playlist" ? playlist : album}
-                                    tracks={tracks[id]}
-                                />
-                            </React.Fragment>
-                        ) : (
-                            <SkeletonPlaylist />
-                        )}
-                    </React.Fragment>
+                    tracks &&
+                    tracks[id] &&
+                    bg ? (
+                        <React.Fragment>
+                            <Info
+                                type={type}
+                                playlist={
+                                    type === "playlist" ? playlist : album
+                                }
+                                tracks={tracks[id]}
+                            />
+                            <TrackTable
+                                playlist={
+                                    type === "playlist" ? playlist : album
+                                }
+                                tracks={tracks[id]}
+                            />
+                        </React.Fragment>
+                    ) : (
+                        <SkeletonPlaylist />
+                    )}
+                </React.Fragment>
             </main>
         </div>
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         playlists: state.playlists,
         tracks: state.tracks,
         tokens: state.tokens,
-        albums: state.albums
+        albums: state.albums,
     }
 }
 
@@ -169,7 +175,7 @@ const ConnectedPlaylistorAlbum = connect(mapStateToProps, {
     clearTracks,
     getTracks,
     getAlbum,
-    setBg
+    setBg,
 })(PlaylistorAlbum)
 
 export default withRouter(withStyles(styles)(ConnectedPlaylistorAlbum))

@@ -8,8 +8,8 @@ const albumReducer = (state = null, action) => {
     }
 }
 
-export const getRecentAlbums = obj => {
-    return async dispatch => {
+export const getRecentAlbums = (obj) => {
+    return async (dispatch) => {
         const tracks = await spotifyService.getRecentTracks(obj)
         dispatch({ type: "GET_RECENT", data: tracks })
     }

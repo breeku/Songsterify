@@ -8,12 +8,12 @@ const searchReducer = (state = null, action) => {
     }
 }
 
-export const searchSpotify = obj => {
-    return async dispatch => {
+export const searchSpotify = (obj) => {
+    return async (dispatch) => {
         const response = await spotifyService.searchSpotify(obj)
         dispatch({
             type: "SET_RESULTS",
-            data: response
+            data: response,
         })
     }
 }

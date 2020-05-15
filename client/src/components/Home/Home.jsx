@@ -6,13 +6,13 @@ import { makeStyles } from "@material-ui/core/styles"
 import RecentAlbums from "./RecentAlbums"
 import SkeletonRecentAlbums from "../Skeletons/SkeletonRecentAlbums"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: theme.root,
     toolbar: theme.mixins.toolbar,
-    content: theme.content
+    content: theme.content,
 }))
 
-const Home = props => {
+const Home = (props) => {
     const classes = useStyles()
     const { albums, user } = props
 
@@ -22,9 +22,7 @@ const Home = props => {
                 <div className={classes.toolbar} />
                 {albums && user ? (
                     <React.Fragment>
-                        <h2>
-                            Welcome {user.display_name}!
-                        </h2>
+                        <h2>Welcome {user.display_name}!</h2>
                         <RecentAlbums tracks={albums.recent} />
                     </React.Fragment>
                 ) : (
@@ -35,16 +33,13 @@ const Home = props => {
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         albums: state.albums,
-        user: state.user
+        user: state.user,
     }
 }
 
-const ConnectedHome = connect(
-    mapStateToProps,
-    null
-)(Home)
+const ConnectedHome = connect(mapStateToProps, null)(Home)
 
 export default ConnectedHome

@@ -8,7 +8,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore"
 import List from "@material-ui/core/List"
 import Divider from "@material-ui/core/Divider"
 
-const Tab = track => {
+const Tab = (track) => {
     const [open, setOpen] = useState(true)
 
     /* istanbul ignore next */
@@ -34,12 +34,11 @@ const Tab = track => {
                                     {track.tab.difficulty
                                         ? track.tab.difficulty
                                         : "unknown"}
-                                    <br/>
+                                    <br />
                                     {track.tab.tuning ? (
                                         <React.Fragment>
-                                            {
-                                                track.tab.tuning.octaves
-                                            } <br /> {track.tab.tuning.name}
+                                            {track.tab.tuning.octaves} <br />{" "}
+                                            {track.tab.tuning.name}
                                             <br /> {track.tab.tuning.notes}
                                         </React.Fragment>
                                     ) : (

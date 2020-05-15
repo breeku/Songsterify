@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 /* eslint-disable no-undef */
-describe("Logged in", function() {
+describe("Logged in", function () {
     const Home =
         "div > div > ul > a:nth-child(1) > div > div.MuiListItemText-root"
     const Search =
@@ -12,41 +12,34 @@ describe("Logged in", function() {
         "div > div > div > div > div > div.MuiSnackbarContent-message"
     const playlistList = "div > div.scrollbar-container.ps.ps--active-y"
 
-    before(function() {
+    before(function () {
         cy.setCookie("accessToken", "null")
         cy.setCookie("refreshToken", Cypress.env("refreshToken"))
     })
 
-    beforeEach(function() {
+    beforeEach(function () {
         cy.visit("/")
 
         cy.get("h2").should("contain", "spotttm")
 
-        cy.get(playlistList).should(
-            "contain",
-            "cypress"
-        )
+        cy.get(playlistList).should("contain", "cypress")
 
         Cypress.Cookies.preserveOnce("accessToken", "refreshToken")
     })
 
-    after(function() {
+    after(function () {
         cy.clearCookies()
     })
 
-    describe("Search", function() {
-        beforeEach(function() {
-            cy.get(Search)
-                .eq(0)
-                .click()
+    describe("Search", function () {
+        beforeEach(function () {
+            cy.get(Search).eq(0).click()
 
             cy.url().should("include", "/search")
         })
 
-        it("Can search", function() {
-            cy.get("#filled-basic")
-                .click()
-                .type("Stam1na{enter}")
+        it("Can search", function () {
+            cy.get("#filled-basic").click().type("Stam1na{enter}")
 
             //Albums
 
@@ -72,10 +65,8 @@ describe("Logged in", function() {
             ).should("contain", "Stam1na")
         })
 
-        it("Can visit a album", function() {
-            cy.get("#filled-basic")
-                .click()
-                .type("Stam1na{enter}")
+        it("Can visit a album", function () {
+            cy.get("#filled-basic").click().type("Stam1na{enter}")
 
             cy.get(
                 "#simple-tabpanel-0 > div > div > div:nth-child(1) > a > img"
@@ -87,10 +78,8 @@ describe("Logged in", function() {
             cy.get("h2").should("contain", "Album")
         })
 
-        it("Can visit a playlist", function() {
-            cy.get("#filled-basic")
-                .click()
-                .type("Stam1na{enter}")
+        it("Can visit a playlist", function () {
+            cy.get("#filled-basic").click().type("Stam1na{enter}")
 
             cy.get("#simple-tab-2 > span.MuiTab-wrapper").click()
 
@@ -105,13 +94,11 @@ describe("Logged in", function() {
         })
     })
 
-    describe("About", function() {
-        it("Can visit about", function() {
+    describe("About", function () {
+        it("Can visit about", function () {
             cy.get("h2").should("contain", "spotttm")
 
-            cy.get(About)
-                .eq(0)
-                .click()
+            cy.get(About).eq(0).click()
 
             cy.url().should("include", "/about")
 
@@ -119,8 +106,8 @@ describe("Logged in", function() {
         })
     })
 
-    describe("Recently played", function() {
-        it("Can visit a recent played album", function() {
+    describe("Recently played", function () {
+        it("Can visit a recent played album", function () {
             cy.get("h2").should("contain", "spotttm")
 
             // Click the first album
@@ -132,15 +119,17 @@ describe("Logged in", function() {
         })
     })
 
-    describe("Playlist", function() {
-        it("Can visit a album from playlist", function() {
+    describe("Playlist", function () {
+        it("Can visit a album from playlist", function () {
             cy.get(playlistList)
-            .contains("cypress_small")
-            .click({ force: true })
+                .contains("cypress_small")
+                .click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
-            cy.get("table > tbody > tr:nth-child(1) > td:nth-child(4) > a").click()
+            cy.get(
+                "table > tbody > tr:nth-child(1) > td:nth-child(4) > a"
+            ).click()
 
             cy.url().should("include", "/album/")
 
@@ -148,20 +137,16 @@ describe("Logged in", function() {
         })
     })
 
-    describe("Tabs", function() {
-        it("Cant get tabs if too many diff artists in playlist", function() {
-            cy.get(playlistList)
-                .contains("cypress_big")
-                .click({ force: true })
+    describe("Tabs", function () {
+        it("Cant get tabs if too many diff artists in playlist", function () {
+            cy.get(playlistList).contains("cypress_big").click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
-            cy.get("div > div > button").should(
-                "be.disabled"
-            )
+            cy.get("div > div > button").should("be.disabled")
         })
 
-        it("Returns tabs from a playlist", function() {
+        it("Returns tabs from a playlist", function () {
             cy.get(playlistList)
                 .contains("cypress_small")
                 .click({ force: true })
@@ -183,9 +168,7 @@ describe("Logged in", function() {
                 .and("eq", "rgba(0, 220, 0, 0.5)")
 
             // Can click on first and see tab link
-            cy.get("table > tbody > tr:nth-child(1)")
-                .eq(0)
-                .click()
+            cy.get("table > tbody > tr:nth-child(1)").eq(0).click()
 
             cy.get("#alert-dialog-title > h2").should("contain", "Rautasorkka")
 
@@ -194,7 +177,7 @@ describe("Logged in", function() {
             ).should("contain", "Open")
         })
 
-        it("Get tabs from a album", function() {
+        it("Get tabs from a album", function () {
             cy.get(firstImage).click()
 
             cy.url().should("include", "/album/")
@@ -215,30 +198,24 @@ describe("Logged in", function() {
         })
     })
 
-    describe("Notifications", function() {
-        it("Disappears on unmount", function() {
-            cy.get(playlistList)
-                .contains("cypress_big")
-                .click({ force: true })
+    describe("Notifications", function () {
+        it("Disappears on unmount", function () {
+            cy.get(playlistList).contains("cypress_big").click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
             // Notification
             cy.get(notificationMessage).should("contain", "Sorry!")
 
-            cy.get(About)
-                .eq(0)
-                .click()
+            cy.get(About).eq(0).click()
 
             cy.url().should("include", "/about")
 
             cy.get(notificationMessage).should("not.exist")
         })
 
-        it("Disappears on dismiss", function() {
-            cy.get(playlistList)
-                .contains("cypress_big")
-                .click({ force: true })
+        it("Disappears on dismiss", function () {
+            cy.get(playlistList).contains("cypress_big").click({ force: true })
 
             cy.url().should("include", "/playlist/")
 
@@ -253,22 +230,19 @@ describe("Logged in", function() {
         })
     })
 
-    describe("Responsive", function() {
-        it("Appbar hides", function() {
+    describe("Responsive", function () {
+        it("Appbar hides", function () {
             cy.viewport(599, 670)
 
             cy.get("header > div > button").eq(0).click()
         })
     })
 
-    describe("Token refresh", function() {
-        it("Refreshes old accesstoken", function() {
+    describe("Token refresh", function () {
+        it("Refreshes old accesstoken", function () {
             cy.get("h2").should("contain", "spotttm")
 
-            cy.get(playlistList).should(
-                "contain",
-                "cypress"
-            )
+            cy.get(playlistList).should("contain", "cypress")
 
             // // // // // // // // //
 
@@ -276,7 +250,7 @@ describe("Logged in", function() {
                 .its("store")
                 .invoke("dispatch", {
                     type: "SET_TOKEN",
-                    data: { accessToken: "invalid" }
+                    data: { accessToken: "invalid" },
                 })
 
             cy.clearCookie("accesstoken")
@@ -285,10 +259,7 @@ describe("Logged in", function() {
 
             cy.get("h2").should("contain", "spotttm")
 
-            cy.get(playlistList).should(
-                "contain",
-                "cypress"
-            )
+            cy.get(playlistList).should("contain", "cypress")
 
             // // // // // // // // //
 
@@ -296,7 +267,7 @@ describe("Logged in", function() {
                 .its("store")
                 .invoke("dispatch", {
                     type: "SET_TOKEN",
-                    data: { accessToken: "invalid" }
+                    data: { accessToken: "invalid" },
                 })
 
             cy.clearCookie("accesstoken")
@@ -313,7 +284,7 @@ describe("Logged in", function() {
                 .its("store")
                 .invoke("dispatch", {
                     type: "SET_TOKEN",
-                    data: { accessToken: "invalid" }
+                    data: { accessToken: "invalid" },
                 })
 
             cy.clearCookie("accesstoken")
@@ -332,8 +303,8 @@ describe("Logged in", function() {
         })
     })
 
-    describe("Logout", function() {
-        it("Can logout", function() {
+    describe("Logout", function () {
+        it("Can logout", function () {
             cy.get("div > button > span.MuiButton-label").click()
 
             cy.reload()

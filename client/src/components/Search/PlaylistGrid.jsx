@@ -4,20 +4,19 @@ import Box from "@material-ui/core/Box"
 
 import { Link } from "react-router-dom"
 
-const PlaylistGrid = props => {
+const PlaylistGrid = (props) => {
     const { classes, playlists } = props
     return (
         <Grid container spacing={3} justify="center">
-            {playlists.map(playlist => (
+            {playlists.map((playlist) => (
                 <Grid item className={classes.container} key={playlist.id}>
                     <Link
                         className={classes.a}
                         to={{
                             pathname: "/playlist/" + playlist.id,
-                            state: { playlist }
+                            state: { playlist },
                         }}
                     >
-                        
                         {playlist.images[1] ? (
                             <img
                                 src={playlist.images[1].url}
@@ -32,7 +31,10 @@ const PlaylistGrid = props => {
                             ></Box>
                         )}
                     </Link>
-                    <div className={classes.aboutOverlay}>{playlist.name} <br/> Tracks: {playlist.tracks.total} <br/> By: {playlist.owner.display_name}</div>
+                    <div className={classes.aboutOverlay}>
+                        {playlist.name} <br /> Tracks: {playlist.tracks.total}{" "}
+                        <br /> By: {playlist.owner.display_name}
+                    </div>
                 </Grid>
             ))}
         </Grid>

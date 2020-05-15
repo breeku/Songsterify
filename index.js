@@ -18,14 +18,14 @@ const app = express()
 //app.set("trust proxy", 1)
 //app.use(limiter)
 
-require('@cypress/code-coverage/middleware/express')(app)
+require("@cypress/code-coverage/middleware/express")(app)
 app.use(cors())
 app.use(bodyParser.json({ limit: "50mb" }))
 app.use(
     bodyParser.urlencoded({
         limit: "50mb",
         extended: true,
-        parameterLimit: 50000
+        parameterLimit: 50000,
     })
 )
 app.use(cookieParser())
@@ -34,11 +34,11 @@ app.use("/api/auth", authRouter)
 app.use("/api/spotify", spotifyRouter)
 app.use("/api/songsterr", songsterrRouter)
 
-app.use(express.static(path.join(__dirname, '/client/build')));
+app.use(express.static(path.join(__dirname, "/client/build")))
 
-app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/client/build/index.html"))
+})
 
 const PORT = process.env.PORT
 

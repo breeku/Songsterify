@@ -6,17 +6,17 @@ import { connect } from "react-redux"
 
 let displayed = []
 
-const Notifier = props => {
+const Notifier = (props) => {
     const { notifications } = props.snackbars
     const { removeSnackbar } = props
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
-    const storeDisplayed = id => {
+    const storeDisplayed = (id) => {
         displayed = [...displayed, id]
     }
 
-    const removeDisplayed = id => {
-        displayed = [...displayed.filter(key => id !== key)]
+    const removeDisplayed = (id) => {
+        displayed = [...displayed.filter((key) => id !== key)]
     }
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Notifier = props => {
                         // removen this snackbar from redux store
                         removeSnackbar(myKey)
                         removeDisplayed(myKey)
-                    }
+                    },
                 })
 
                 // keep track of snackbars that we've displayed
@@ -56,14 +56,14 @@ const Notifier = props => {
     return null
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        snackbars: state.snackbars
+        snackbars: state.snackbars,
     }
 }
 
 const mapDispatchToProps = {
-    removeSnackbar
+    removeSnackbar,
 }
 
 const ConnectedNotifier = connect(mapStateToProps, mapDispatchToProps)(Notifier)

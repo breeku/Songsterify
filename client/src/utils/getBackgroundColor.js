@@ -1,6 +1,6 @@
 import Vibrant from "node-vibrant"
 
-const getBackgroundColor = async img => {
+const getBackgroundColor = async (img) => {
     // https://github.com/idanlo/react-spotify/blob/master/src/Components/PlaylistView/PlaylistView.jsx
     const palette = await Vibrant.from(img).getPalette()
     let rgb = palette.DarkMuted._rgb.join(", ")

@@ -17,7 +17,7 @@ const reducer = combineReducers({
     albums: albumReducer,
     snackbars: snackbarReducer,
     search: searchReducer,
-    user: userReducer
+    user: userReducer,
 })
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))

@@ -2,7 +2,7 @@ const Sentry = require("../sentry")
 const spotifyRouter = require("express").Router()
 const spotifyApi = require("../spotifySetup")
 
-const getRecentTracks = async accessToken => {
+const getRecentTracks = async (accessToken) => {
     await spotifyApi.setAccessToken(accessToken)
     const limit = 30
     const artists = []
@@ -13,7 +13,7 @@ const getRecentTracks = async accessToken => {
             artists.length === 0 ||
             (artists.length > 0 && !artists.includes(track.track.album.name))
         ) {
-            tracks = {...tracks, [track.track.album.id]: track.track.album}
+            tracks = { ...tracks, [track.track.album.id]: track.track.album }
             artists.push(track.track.album.name)
         }
     }
@@ -26,7 +26,7 @@ const getAlbum = async (id, accessToken) => {
     return tracks.body
 }
 
-const getPlaylists = async accessToken => {
+const getPlaylists = async (accessToken) => {
     await spotifyApi.setAccessToken(accessToken)
     let limit = 50
     let offset = 0
@@ -65,11 +65,16 @@ const getTracks = async (id, accessToken) => {
 
 const Search = async (value, accessToken) => {
     await spotifyApi.setAccessToken(accessToken)
-    const results = await spotifyApi.search(value, ['album', 'artist', 'playlist', 'track'])
+    const results = await spotifyApi.search(value, [
+        "album",
+        "artist",
+        "playlist",
+        "track",
+    ])
     return results.body
 }
 
-const getUserAbout = async accessToken => {
+const getUserAbout = async (accessToken) => {
     await spotifyApi.setAccessToken(accessToken)
     const results = await spotifyApi.getMe()
     return results.body
@@ -112,7 +117,7 @@ spotifyRouter.post("/album", async (req, res) => {
     try {
         obj = {
             tracks: null,
-            album: true
+            album: true,
         }
         let tracks = await getAlbum(req.body.id, req.body.accessToken)
         obj.tracks = tracks

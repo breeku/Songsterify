@@ -15,47 +15,47 @@ import { withStyles } from "@material-ui/core/styles"
 
 import Tab from "./Tab/Tab"
 
-const styles = theme => ({
+const styles = (theme) => ({
     root: {
         marginTop: "1em",
         width: "100%",
     },
     text: {
-        color: "whitesmoke"
+        color: "whitesmoke",
     },
     row: {
         backgroundColor: "rgba(0,0,0,0)",
-        transition: "all 1s"
+        transition: "all 1s",
     },
     tabFound: {
         backgroundColor: "rgba(0, 220, 0, 0.5)",
         cursor: "pointer",
         "&:hover": {
-            backgroundColor: "rgba(0, 220, 0, 0.7)"
-        }
+            backgroundColor: "rgba(0, 220, 0, 0.7)",
+        },
     },
     tabNotFound: {
         backgroundColor: "rgba(0, 0, 0, 0.6)",
         "&:hover": {
-            backgroundColor: "rgba(0, 0, 0, 0.8)"
-        }
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+        },
     },
     a: {
         color: "whitesmoke",
         textDecoration: "none",
         "&:hover": {
-            textDecoration: "underline"
-        }
-    }
+            textDecoration: "underline",
+        },
+    },
 })
 
-const millisToMinutesAndSeconds = millis => {
+const millisToMinutesAndSeconds = (millis) => {
     const minutes = Math.floor(millis / 60000)
     const seconds = ((millis % 60000) / 1000).toFixed(0)
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds
 }
 
-const TrackTable = props => {
+const TrackTable = (props) => {
     const { classes, playlist } = props
     const { album } = props.tracks
     const [open, setOpen] = useState(false)
@@ -78,9 +78,9 @@ const TrackTable = props => {
         }
     }
 
-    const rowStyling = track => {
+    const rowStyling = (track) => {
         if (tabs) {
-            if (tabs.find(x => x.id === track.id)) {
+            if (tabs.find((x) => x.id === track.id)) {
                 return classes.tabFound
             } else {
                 return classes.tabNotFound
@@ -90,9 +90,9 @@ const TrackTable = props => {
         }
     }
 
-    const handleOpen = id => {
+    const handleOpen = (id) => {
         setOpen(true)
-        if (tabs) setTab(tabs.find(x => x.id === id))
+        if (tabs) setTab(tabs.find((x) => x.id === id))
     }
 
     const handleClose = () => {
@@ -119,7 +119,7 @@ const TrackTable = props => {
                 </TableHead>
                 <TableBody>
                     <React.Fragment>
-                        {tracks.map(track => (
+                        {tracks.map((track) => (
                             <TableRow
                                 key={track.id}
                                 onClick={() => handleOpen(track.id)}
@@ -144,7 +144,7 @@ const TrackTable = props => {
                                     align="right"
                                     className={classes.text}
                                 >
-                                    {track.artists.map(artist => (
+                                    {track.artists.map((artist) => (
                                         <div key={artist.id}>{artist.name}</div>
                                     ))}
                                 </TableCell>
@@ -158,7 +158,7 @@ const TrackTable = props => {
                                             to={{
                                                 pathname:
                                                     "/album/" + track.album.id,
-                                                state: { album: track.album }
+                                                state: { album: track.album },
                                             }}
                                         >
                                             {track.album.name}

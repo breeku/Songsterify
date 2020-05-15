@@ -9,7 +9,7 @@ const spotifyReducer = (state = null, action) => {
 }
 
 export const initializePlaylists = (tokens) => {
-    return async dispatch => {
+    return async (dispatch) => {
         const playlists = await spotifyService.getPlaylists(tokens)
         dispatch({ type: "INIT_PLAYLISTS", data: playlists })
     }

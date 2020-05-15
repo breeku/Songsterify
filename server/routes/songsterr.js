@@ -1,4 +1,4 @@
-const Sentry = require('../sentry');
+const Sentry = require("../sentry")
 const songsterrRouter = require("express").Router()
 const spotifyApi = require("../spotifySetup")
 const slowDown = require("express-slow-down")
@@ -7,14 +7,14 @@ const { songsterrSearch } = require("songsterr-api-node")
 const songsterrLimiter = slowDown({
     windowMs: 3 * 60 * 1000, // 3 minutes
     delayAfter: 10, // allow 10 requests to go at full-speed, effectively you can lookup 10 playlists. then...
-    delayMs: 250 // 6th request has a 250ms delay, 7th has a 500ms delay, 8th gets 750ms, etc
+    delayMs: 250, // 6th request has a 250ms delay, 7th has a 500ms delay, 8th gets 750ms, etc
 })
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
+    return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-const getTabs = async tracks => {
+const getTabs = async (tracks) => {
     const tabs = []
     const newTracks = []
     const newArtists = []
@@ -32,19 +32,21 @@ const getTabs = async tracks => {
         }
     }
     for (track of newTracks) {
-        if (!artists.find(x => x.name === track.artists[0].name.toLowerCase()))
+        if (
+            !artists.find((x) => x.name === track.artists[0].name.toLowerCase())
+        )
             artists.push({
                 name: track.artists[0].name.toLowerCase(),
-                id: track.artists[0].id
+                id: track.artists[0].id,
             })
     }
     for (artist of artists) {
         const genres = []
         const genre = await spotifyApi.getArtist(artist.id)
         for (style of genre.body.genres) {
-            if (!genres.find(genre => genre === style)) genres.push(style)
+            if (!genres.find((genre) => genre === style)) genres.push(style)
         }
-        const i = artists.findIndex(x => x.id == artist.id)
+        const i = artists.findIndex((x) => x.id == artist.id)
         artists[i] = { ...artist, genres }
         if (genres.length === 0) {
             noGenres = true
@@ -67,7 +69,8 @@ const getTabs = async tracks => {
                 g.match(/jazz/g) ||
                 g.match(/math/g)
             ) {
-                if (!newArtists.find(x => x.id === artist.id)) newArtists.push(artist)
+                if (!newArtists.find((x) => x.id === artist.id))
+                    newArtists.push(artist)
             } else {
                 //
             }
@@ -83,7 +86,7 @@ const getTabs = async tracks => {
                 if (tab.title.toLowerCase() === track.name.toLowerCase()) {
                     const obj = {
                         tab,
-                        id: track.id
+                        id: track.id,
                     }
                     tabs.push(obj)
                 }
@@ -100,7 +103,7 @@ songsterrRouter.post("/tracks/multiple", songsterrLimiter, async (req, res) => {
         res.send(songsterrTabs)
     } catch (e) {
         console.log(e)
-        Sentry.captureException(e);
+        Sentry.captureException(e)
         res.sendStatus(e.statusCode)
     }
 })
