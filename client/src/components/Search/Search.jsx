@@ -16,27 +16,27 @@ import PlaylistGrid from "./PlaylistGrid"
 
 import { searchSpotify } from "../../reducers/searchReducer"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: theme.root,
     toolbar: theme.mixins.toolbar,
     content: theme.content,
     a: {
-        color: "whitesmoke"
+        color: "whitesmoke",
     },
     textField: {
         marginLeft: "auto",
         marginRight: "auto",
-        width: "100%"
+        width: "100%",
     },
     playlistPic: {
         maxWidth: "300px",
         maxHeight: "300px",
         minWidth: "300px",
         minHeight: "300px",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);"
+        boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);",
     },
     missingPic: {
-        backgroundColor: "rgba(0,0,0,0.2)"
+        backgroundColor: "rgba(0,0,0,0.2)",
     },
     container: {
         position: "relative",
@@ -52,8 +52,8 @@ const useStyles = makeStyles(theme => ({
         paddingRight: "2em",
         paddingLeft: "2em",
         whiteSpace: "nowrap",
-        pointerEvents: "none"
-    }
+        pointerEvents: "none",
+    },
 }))
 
 function TabPanel(props) {
@@ -76,17 +76,17 @@ function TabPanel(props) {
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
-        "aria-controls": `simple-tabpanel-${index}`
+        "aria-controls": `simple-tabpanel-${index}`,
     }
 }
 
-const Search = props => {
+const Search = (props) => {
     const { search, tokens, searchSpotify } = props
     const [formValue, setFormValue] = useState("")
     const [tabValue, setTabValue] = useState(0)
     const classes = useStyles()
 
-    const formChange = e => {
+    const formChange = (e) => {
         setFormValue(e.target.value)
     }
 
@@ -94,7 +94,7 @@ const Search = props => {
         setTabValue(newValue)
     }
 
-    const submitSearch = e => {
+    const submitSearch = (e) => {
         e.preventDefault()
         searchSpotify({ value: formValue, accessToken: tokens.accessToken })
     }
@@ -106,16 +106,22 @@ const Search = props => {
                 <form
                     noValidate
                     autoComplete="off"
-                    onSubmit={e => submitSearch(e)}
+                    onSubmit={(e) => submitSearch(e)}
                 >
                     <TextField
                         id="filled-basic"
                         className={classes.textField}
                         label="Search"
                         margin="normal"
-                        variant="filled"
+                        variant="outlined"
                         autoFocus={true}
                         onChange={formChange}
+                        inputProps={{
+                            style: { color: "whitesmoke" },
+                        }}
+                        InputLabelProps={{
+                            style: { color: "whitesmoke" },
+                        }}
                     />
                 </form>
                 <Paper square style={{ backgroundColor: "rgba(0,0,0,0.2)" }}>
@@ -128,7 +134,7 @@ const Search = props => {
                         centered
                     >
                         <Tab
-                            classes={{textColorSecondary: classes.a}}
+                            classes={{ textColorSecondary: classes.a }}
                             label="Albums"
                             disabled={
                                 search && search.albums.items.length > 0
@@ -138,7 +144,7 @@ const Search = props => {
                             {...a11yProps(0)}
                         />
                         <Tab
-                            classes={{textColorSecondary: classes.a}}
+                            classes={{ textColorSecondary: classes.a }}
                             label="Artists"
                             disabled={
                                 search && search.artists.items.length > 0
@@ -148,7 +154,7 @@ const Search = props => {
                             {...a11yProps(1)}
                         />
                         <Tab
-                            classes={{textColorSecondary: classes.a}}
+                            classes={{ textColorSecondary: classes.a }}
                             label="Playlists"
                             disabled={
                                 search && search.playlists.items.length > 0
@@ -192,16 +198,13 @@ const Search = props => {
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         tokens: state.tokens,
-        search: state.search
+        search: state.search,
     }
 }
 
-const ConnectedSearch = connect(
-    mapStateToProps,
-    { searchSpotify }
-)(Search)
+const ConnectedSearch = connect(mapStateToProps, { searchSpotify })(Search)
 
 export default ConnectedSearch
