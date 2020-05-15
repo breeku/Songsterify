@@ -1,21 +1,21 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import Collapse from "@material-ui/core/Collapse"
-import ExpandLess from "@material-ui/icons/ExpandLess"
-import ExpandMore from "@material-ui/icons/ExpandMore"
-import List from "@material-ui/core/List"
-import Divider from "@material-ui/core/Divider"
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
 
-const Tab = track => {
-    const [open, setOpen] = useState(true)
+const Tab = (track) => {
+    const [open, setOpen] = useState(true);
 
     /* istanbul ignore next */
     const handleClick = () => {
-        setOpen(!open)
-    }
-    console.log(track.tab.tuning)
+        setOpen(!open);
+    };
+    console.log(track.tab.tuning);
 
     return (
         <React.Fragment>
@@ -34,12 +34,11 @@ const Tab = track => {
                                     {track.tab.difficulty
                                         ? track.tab.difficulty
                                         : "unknown"}
-                                    <br/>
+                                    <br />
                                     {track.tab.tuning ? (
                                         <React.Fragment>
-                                            {
-                                                track.tab.tuning.octaves
-                                            } <br /> {track.tab.tuning.name}
+                                            {track.tab.tuning.octaves} <br />{" "}
+                                            {track.tab.tuning.name}
                                             <br /> {track.tab.tuning.notes}
                                         </React.Fragment>
                                     ) : (
@@ -53,7 +52,7 @@ const Tab = track => {
             </Collapse>
             <Divider />
         </React.Fragment>
-    )
-}
+    );
+};
 
-export default Tab
+export default Tab;

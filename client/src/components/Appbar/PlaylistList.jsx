@@ -1,29 +1,29 @@
-import React from "react"
+import React from "react";
 
-import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import { withStyles } from "@material-ui/core/styles"
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { withStyles } from "@material-ui/core/styles";
 
-import SkeletonPlaylists from "../Skeletons/SkeletonPlaylists"
+import SkeletonPlaylists from "../Skeletons/SkeletonPlaylists";
 
-import PerfectScrollbar from "react-perfect-scrollbar"
-import "react-perfect-scrollbar/dist/css/styles.css"
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
-const styles = theme => ({
-    a: theme.aNoDecoration
-})
+const styles = (theme) => ({
+    a: theme.aNoDecoration,
+});
 
-const PlaylistList = props => {
-    const { classes, playlists, tokens } = props
+const PlaylistList = (props) => {
+    const { classes, playlists, tokens } = props;
 
     return (
         <PerfectScrollbar>
             {playlists ? (
                 <div style={{ borderRight: "15px solid transparent" }}>
-                    {playlists.playlists.items.map(list => (
+                    {playlists.playlists.items.map((list) => (
                         <Link
                             className={classes.a}
                             to={"/playlist/" + list.id}
@@ -47,19 +47,16 @@ const PlaylistList = props => {
                 </React.Fragment>
             )}
         </PerfectScrollbar>
-    )
-}
+    );
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         tokens: state.tokens,
-        playlists: state.playlists
-    }
-}
+        playlists: state.playlists,
+    };
+};
 
-const ConnectedPlaylists = connect(
-    mapStateToProps,
-    null
-)(PlaylistList)
+const ConnectedPlaylists = connect(mapStateToProps, null)(PlaylistList);
 
-export default withStyles(styles)(ConnectedPlaylists)
+export default withStyles(styles)(ConnectedPlaylists);
