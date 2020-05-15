@@ -29,40 +29,40 @@ import MenuIcon from "@material-ui/icons/Menu"
 import Cookies from "js-cookie"
 
 const drawerWidth = 300
-const styles = theme => ({
+const styles = (theme) => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     appBar: {
         backgroundColor: "transparent",
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: drawerWidth
-        }
+            marginLeft: drawerWidth,
+        },
     },
     drawer: {
         [theme.breakpoints.up("sm")]: {
             width: drawerWidth,
-            flexShrink: 0
-        }
+            flexShrink: 0,
+        },
     },
     drawerPaper: {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-        width: drawerWidth
+        width: drawerWidth,
     },
     menuButton: {
         marginRight: theme.spacing(2),
         [theme.breakpoints.up("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     a: theme.aNoDecoration,
     title: {
-        flexGrow: 1
-    }
+        flexGrow: 1,
+    },
 })
 
-const Appbar = props => {
+const Appbar = (props) => {
     const { classes, tokens } = props
     const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -94,7 +94,7 @@ const Appbar = props => {
                 >
                     <ListItem button>
                         <ListItemIcon>
-                            <HomeIcon />
+                            <HomeIcon color="primary" />
                         </ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItem>
@@ -108,7 +108,7 @@ const Appbar = props => {
                         disabled={tokens && tokens.accessToken ? false : true}
                     >
                         <ListItemIcon>
-                            <SearchIcon />
+                            <SearchIcon color="primary" />
                         </ListItemIcon>
                         <ListItemText primary="Search" />
                     </ListItem>
@@ -116,7 +116,7 @@ const Appbar = props => {
                 <Link className={classes.a} to="/about/">
                     <ListItem button>
                         <ListItemIcon>
-                            <HelpOutlineIcon />
+                            <HelpOutlineIcon color="primary" />
                         </ListItemIcon>
                         <ListItemText primary="About" />
                     </ListItem>
@@ -166,13 +166,13 @@ const Appbar = props => {
                     <Drawer
                         variant="temporary"
                         classes={{
-                            paper: classes.drawerPaper
+                            paper: classes.drawerPaper,
                         }}
                         anchor="left"
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         ModalProps={{
-                            keepMounted: true // Better open performance on mobile.
+                            keepMounted: true, // Better open performance on mobile.
                         }}
                     >
                         {drawer}
@@ -182,7 +182,7 @@ const Appbar = props => {
                     <Drawer
                         variant="permanent"
                         classes={{
-                            paper: classes.drawerPaper
+                            paper: classes.drawerPaper,
                         }}
                         anchor="left"
                         open
@@ -195,9 +195,9 @@ const Appbar = props => {
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        tokens: state.tokens
+        tokens: state.tokens,
     }
 }
 
