@@ -1,10 +1,10 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
+import React from "react"
+import Grid from "@material-ui/core/Grid"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 const AlbumGrid = (props) => {
-    const { classes, albums } = props;
+    const { classes, albums } = props
     return (
         <Grid container spacing={3} justify="center">
             {albums.map((album) => (
@@ -25,7 +25,7 @@ const AlbumGrid = (props) => {
                 </Grid>
             ))}
         </Grid>
-    );
-};
+    )
+}
 
-export default AlbumGrid;
+export default AlbumGrid

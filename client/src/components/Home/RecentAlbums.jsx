@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core/styles"
+import Grid from "@material-ui/core/Grid"
 
 const styles = (theme) => ({
     a: {
@@ -15,10 +15,10 @@ const styles = (theme) => ({
     container: {
         maxWidth: "100%",
     },
-});
+})
 
 const RecentAlbums = (props) => {
-    const { classes, tracks } = props;
+    const { classes, tracks } = props
 
     return (
         <React.Fragment>
@@ -45,7 +45,7 @@ const RecentAlbums = (props) => {
                 ))}
             </Grid>
         </React.Fragment>
-    );
-};
+    )
+}
 
-export default withStyles(styles)(RecentAlbums);
+export default withStyles(styles)(RecentAlbums)

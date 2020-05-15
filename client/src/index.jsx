@@ -1,14 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import store from "./store";
-import App from "./App";
-import { Provider } from "react-redux";
-import { SnackbarProvider } from "notistack";
-import { ThemeProvider } from "@material-ui/styles";
-import { createMuiTheme } from "@material-ui/core/styles";
-import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
+import React from "react"
+import ReactDOM from "react-dom"
+import store from "./store"
+import App from "./App"
+import { Provider } from "react-redux"
+import { SnackbarProvider } from "notistack"
+import { ThemeProvider } from "@material-ui/styles"
+import { createMuiTheme } from "@material-ui/core/styles"
+import createBreakpoints from "@material-ui/core/styles/createBreakpoints"
 
-const breakpoints = createBreakpoints({});
+const breakpoints = createBreakpoints({})
 
 const theme = createMuiTheme({
     root: {
@@ -30,7 +30,7 @@ const theme = createMuiTheme({
         color: "whitesmoke",
         textDecoration: "none",
     },
-});
+})
 
 ReactDOM.render(
     <Provider store={store}>
@@ -41,10 +41,10 @@ ReactDOM.render(
         </ThemeProvider>
     </Provider>,
     document.getElementById("root")
-);
+)
 
 if (window.Cypress) {
-    window.store = store;
+    window.store = store
 }
 
 // If you want your app to work offline and load faster, you can change

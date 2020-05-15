@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect } from "react"
+import { connect } from "react-redux"
+import { withRouter } from "react-router-dom"
 
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles"
 
-import TrackTable from "./TrackTable";
-import Info from "./Info";
-import SkeletonPlaylist from "../Skeletons/SkeletonPlaylist";
+import TrackTable from "./TrackTable"
+import Info from "./Info"
+import SkeletonPlaylist from "../Skeletons/SkeletonPlaylist"
 
-import getBackgroundColor from "../../utils/getBackgroundColor";
+import getBackgroundColor from "../../utils/getBackgroundColor"
 
 import {
     setBg,
     clearTracks,
     getTracks,
     getAlbum,
-} from "../../reducers/trackReducer";
+} from "../../reducers/trackReducer"
 
 const styles = (theme) => ({
     root: {
@@ -24,14 +24,14 @@ const styles = (theme) => ({
     },
     content: theme.content,
     toolbar: theme.mixins.toolbar,
-});
+})
 
 const PlaylistorAlbum = (props) => {
-    const [playlist, setPlaylist] = useState(null);
-    const [album, setAlbum] = useState(null);
+    const [playlist, setPlaylist] = useState(null)
+    const [album, setAlbum] = useState(null)
     const [bg, setBackground] = useState(
         "linear-gradient(rgb(56, 64, 103), rgb(6, 9, 10) 85%)"
-    );
+    )
     const {
         classes,
         tokens,
@@ -42,15 +42,15 @@ const PlaylistorAlbum = (props) => {
         albums,
         getAlbum,
         setBg,
-    } = props;
+    } = props
 
     const type =
-        location.pathname.slice(1, 9) === "playlist" ? "playlist" : "album";
+        location.pathname.slice(1, 9) === "playlist" ? "playlist" : "album"
 
     const id =
         type === "playlist"
             ? location.pathname.slice(10)
-            : location.pathname.slice(7);
+            : location.pathname.slice(7)
 
     useEffect(() => {
         if (tokens && tokens.accessToken) {
@@ -59,31 +59,31 @@ const PlaylistorAlbum = (props) => {
                     getTracks({
                         id,
                         accessToken: tokens.accessToken,
-                    });
+                    })
                 } else {
                     getAlbum({
                         id,
                         accessToken: tokens.accessToken,
-                    });
+                    })
                 }
             }
         }
-    }, [getAlbum, getTracks, id, tokens, tracks, type]);
+    }, [getAlbum, getTracks, id, tokens, tracks, type])
 
     useEffect(() => {
         if (tracks && tracks[id] && tracks[id].bg) {
-            setBackground(tracks[id].bg);
+            setBackground(tracks[id].bg)
         }
-    }, [id, tracks]);
+    }, [id, tracks])
 
     useEffect(() => {
         if (type === "playlist") {
             if (playlists && !location.state) {
                 // linked from playlistlist
-                setPlaylist(playlists.playlists.items.find((x) => x.id === id));
+                setPlaylist(playlists.playlists.items.find((x) => x.id === id))
             } else if (location && location.state) {
                 // linked from tracktable link
-                setPlaylist(location.state.playlist);
+                setPlaylist(location.state.playlist)
             } else {
                 // linked from /browse/ or refreshed page of a album which does not exist in recent
                 // fetch
@@ -91,16 +91,16 @@ const PlaylistorAlbum = (props) => {
         } else {
             if (albums && albums.recent && !location.state) {
                 // linked from recent albums
-                setAlbum(albums.recent[id]);
+                setAlbum(albums.recent[id])
             } else if (location && location.state) {
                 // linked from tracktable link
-                setAlbum(location.state.album);
+                setAlbum(location.state.album)
             } else {
                 // linked from /browse/ or refreshed page of a album which does not exist in recent
                 // fetch
             }
         }
-    }, [albums, id, location, playlists, type]);
+    }, [albums, id, location, playlists, type])
 
     useEffect(() => {
         const setBackgroundColor = async () => {
@@ -110,8 +110,8 @@ const PlaylistorAlbum = (props) => {
                         ? await getBackgroundColor(playlist.images[0].url)
                         : await getBackgroundColor(album.images[0].url),
                 id: type === "playlist" ? playlist.id : album.id,
-            });
-        };
+            })
+        }
         if (
             (album || playlist) &&
             id &&
@@ -119,9 +119,9 @@ const PlaylistorAlbum = (props) => {
             tracks[id] &&
             !tracks[id].bg
         ) {
-            setBackgroundColor();
+            setBackgroundColor()
         }
-    }, [album, id, playlist, setBg, tracks, type]);
+    }, [album, id, playlist, setBg, tracks, type])
 
     return (
         <div
@@ -159,8 +159,8 @@ const PlaylistorAlbum = (props) => {
                 </React.Fragment>
             </main>
         </div>
-    );
-};
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -168,14 +168,14 @@ const mapStateToProps = (state) => {
         tracks: state.tracks,
         tokens: state.tokens,
         albums: state.albums,
-    };
-};
+    }
+}
 
 const ConnectedPlaylistorAlbum = connect(mapStateToProps, {
     clearTracks,
     getTracks,
     getAlbum,
     setBg,
-})(PlaylistorAlbum);
+})(PlaylistorAlbum)
 
-export default withRouter(withStyles(styles)(ConnectedPlaylistorAlbum));
+export default withRouter(withStyles(styles)(ConnectedPlaylistorAlbum))

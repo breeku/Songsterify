@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"
 
-import Grid from "@material-ui/core/Grid";
-import Skeleton from "@material-ui/lab/Skeleton";
+import Grid from "@material-ui/core/Grid"
+import Skeleton from "@material-ui/lab/Skeleton"
 
 const SkeletonPlaylist = () => {
     return (
@@ -26,7 +26,7 @@ const SkeletonPlaylist = () => {
                 <Skeleton height={50} width={"100%"} />
             </div>
         </React.Fragment>
-    );
-};
+    )
+}
 
-export default SkeletonPlaylist;
+export default SkeletonPlaylist
