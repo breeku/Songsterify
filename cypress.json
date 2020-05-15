@@ -3,9 +3,10 @@
     "chromeWebSecurity": false,
     "viewportWidth": 1920,
     "viewportHeight": 1080,
+    "video": false,
     "env": {
         "codeCoverage": {
-          "url": "http://localhost:3003/__coverage__"
+            "url": "http://localhost:3003/__coverage__"
         }
-      }
+    }
 }
