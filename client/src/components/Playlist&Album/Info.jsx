@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react"
+import { connect } from "react-redux"
 
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid"
+import { withStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+import CircularProgress from "@material-ui/core/CircularProgress"
+import Box from "@material-ui/core/Box"
 
-import { getTabs } from "../../reducers/trackReducer";
-import { enqueueSnackbar, closeSnackbar } from "../../reducers/snackbarReducer";
+import { getTabs } from "../../reducers/trackReducer"
+import { enqueueSnackbar, closeSnackbar } from "../../reducers/snackbarReducer"
 
 const styles = (theme) => ({
     root: {},
@@ -25,19 +25,19 @@ const styles = (theme) => ({
     text: {
         color: "whitesmoke",
     },
-});
+})
 
 const Info = (props) => {
-    const [loading, setLoading] = useState(false);
-    const tracks = props.tracks.tracks.items;
-    const { type, playlist, classes, enqueueSnackbar, closeSnackbar } = props;
-    const { differentArtists, tabs } = props.tracks;
-    const artistLimit = 20;
+    const [loading, setLoading] = useState(false)
+    const tracks = props.tracks.tracks.items
+    const { type, playlist, classes, enqueueSnackbar, closeSnackbar } = props
+    const { differentArtists, tabs } = props.tracks
+    const artistLimit = 20
 
     const getTabs = async () => {
-        props.getTabs({ tracks, id: playlist.id });
-        setLoading(true);
-    };
+        props.getTabs({ tracks, id: playlist.id })
+        setLoading(true)
+    }
 
     useEffect(() => {
         if (tabs) {
@@ -65,10 +65,10 @@ const Info = (props) => {
                         </Button>
                     ),
                 },
-            });
-            setLoading(false);
+            })
+            setLoading(false)
         }
-    }, [closeSnackbar, enqueueSnackbar, tabs]);
+    }, [closeSnackbar, enqueueSnackbar, tabs])
 
     useEffect(() => {
         if (differentArtists > artistLimit) {
@@ -91,15 +91,15 @@ const Info = (props) => {
                         </Button>
                     ),
                 },
-            });
+            })
         }
-    }, [closeSnackbar, differentArtists, enqueueSnackbar, playlist, type]);
+    }, [closeSnackbar, differentArtists, enqueueSnackbar, playlist, type])
 
     useEffect(() => {
         return () => {
-            closeSnackbar();
-        };
-    }, [closeSnackbar]);
+            closeSnackbar()
+        }
+    }, [closeSnackbar])
 
     return (
         <React.Fragment>
@@ -161,13 +161,13 @@ const Info = (props) => {
                 </Grid>
             </Grid>
         </React.Fragment>
-    );
-};
+    )
+}
 
 const connectedInfo = connect(null, {
     getTabs,
     enqueueSnackbar,
     closeSnackbar,
-})(Info);
+})(Info)
 
-export default withStyles(styles)(connectedInfo);
+export default withStyles(styles)(connectedInfo)

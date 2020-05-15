@@ -1,6 +1,6 @@
-import React from "react";
+import React from "react"
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles((theme) => ({
     root: theme.root,
@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     a: {
         color: "whitesmoke",
     },
-}));
+}))
 
 const About = () => {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <div className={classes.root}>
@@ -63,7 +63,7 @@ const About = () => {
                 </div>
             </main>
         </div>
-    );
-};
+    )
+}
 
-export default About;
+export default About

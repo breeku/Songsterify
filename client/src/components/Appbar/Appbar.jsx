@@ -1,34 +1,34 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
-import PlaylistList from "./PlaylistList";
+import PlaylistList from "./PlaylistList"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 
-import { withStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import Hidden from "@material-ui/core/Hidden";
+import { withStyles } from "@material-ui/core/styles"
+import Drawer from "@material-ui/core/Drawer"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Typography from "@material-ui/core/Typography"
+import Divider from "@material-ui/core/Divider"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
+import List from "@material-ui/core/List"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import Button from "@material-ui/core/Button"
+import IconButton from "@material-ui/core/IconButton"
+import Hidden from "@material-ui/core/Hidden"
 
-import HomeIcon from "@material-ui/icons/Home";
-import SearchIcon from "@material-ui/icons/Search";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home"
+import SearchIcon from "@material-ui/icons/Search"
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
+import MenuIcon from "@material-ui/icons/Menu"
 
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"
 
-const drawerWidth = 300;
+const drawerWidth = 300
 const styles = (theme) => ({
     root: {
         flexGrow: 1,
@@ -60,29 +60,29 @@ const styles = (theme) => ({
     title: {
         flexGrow: 1,
     },
-});
+})
 
 const Appbar = (props) => {
-    const { classes, tokens } = props;
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const { classes, tokens } = props
+    const [mobileOpen, setMobileOpen] = useState(false)
 
-    const currentUrl = window.location.origin;
-    const redirectUrl = currentUrl + "/callback/";
-    const scopes = "&scope=user-read-recently-played%20user-top-read";
+    const currentUrl = window.location.origin
+    const redirectUrl = currentUrl + "/callback/"
+    const scopes = "&scope=user-read-recently-played%20user-top-read"
     const authUrl =
         "https://accounts.spotify.com/authorize?client_id=aef42b48cc74441299b7b1ac9b42a779&response_type=code&redirect_uri=" +
         redirectUrl +
-        scopes;
+        scopes
 
     const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
+        setMobileOpen(!mobileOpen)
+    }
 
     const handleLogout = () => {
-        Cookies.remove("accessToken");
-        Cookies.remove("refreshToken");
-        window.location.href = "/";
-    };
+        Cookies.remove("accessToken")
+        Cookies.remove("refreshToken")
+        window.location.href = "/"
+    }
 
     const drawer = (
         <React.Fragment>
@@ -125,7 +125,7 @@ const Appbar = (props) => {
             <Divider />
             <PlaylistList />
         </React.Fragment>
-    );
+    )
 
     return (
         <React.Fragment>
@@ -192,15 +192,15 @@ const Appbar = (props) => {
                 </Hidden>
             </nav>
         </React.Fragment>
-    );
-};
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
         tokens: state.tokens,
-    };
-};
+    }
+}
 
-const ConnectedAppbar = connect(mapStateToProps, null)(Appbar);
+const ConnectedAppbar = connect(mapStateToProps, null)(Appbar)
 
-export default withStyles(styles)(ConnectedAppbar);
+export default withStyles(styles)(ConnectedAppbar)

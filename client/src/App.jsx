@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from "react"
 import {
     BrowserRouter as Router,
     Route,
     Redirect,
     Switch,
-} from "react-router-dom";
-import { connect } from "react-redux";
+} from "react-router-dom"
+import { connect } from "react-redux"
 
-import Main from "./components/Home/Home";
-import Callback from "./components/Callback";
-import Login from "./components/Login";
-import PlaylistorAlbum from "./components/Playlist&Album/PlaylistorAlbum";
-import Appbar from "./components/Appbar/Appbar";
-import About from "./components/About/About";
-import Search from "./components/Search/Search";
-import Notifier from "./components/Notifier/Notifier";
+import Main from "./components/Home/Home"
+import Callback from "./components/Callback"
+import Login from "./components/Login"
+import PlaylistorAlbum from "./components/Playlist&Album/PlaylistorAlbum"
+import Appbar from "./components/Appbar/Appbar"
+import About from "./components/About/About"
+import Search from "./components/Search/Search"
+import Notifier from "./components/Notifier/Notifier"
 
-import { getRecentAlbums } from "./reducers/albumReducer";
-import { setToken } from "./reducers/authReducer";
-import { initializePlaylists } from "./reducers/playlistReducer";
-import { getUser } from "./reducers/userReducer";
+import { getRecentAlbums } from "./reducers/albumReducer"
+import { setToken } from "./reducers/authReducer"
+import { initializePlaylists } from "./reducers/playlistReducer"
+import { getUser } from "./reducers/userReducer"
 
 const routes = [
     {
@@ -54,7 +54,7 @@ const routes = [
         exact: true,
         main: () => <Search />,
     },
-];
+]
 
 const App = (props) => {
     const {
@@ -66,42 +66,42 @@ const App = (props) => {
         playlists,
         user,
         getUser,
-    } = props;
+    } = props
 
     useEffect(() => {
         if (!tokens) {
-            setToken();
+            setToken()
         }
-    }, [setToken, tokens]);
+    }, [setToken, tokens])
 
     useEffect(() => {
         if (tokens && tokens.accessToken && !albums) {
-            getRecentAlbums({ accessToken: tokens.accessToken });
+            getRecentAlbums({ accessToken: tokens.accessToken })
         }
-    }, [albums, getRecentAlbums, tokens]);
+    }, [albums, getRecentAlbums, tokens])
 
     useEffect(() => {
         if (tokens && tokens.accessToken && !playlists) {
-            initializePlaylists(tokens);
+            initializePlaylists(tokens)
         }
-    }, [initializePlaylists, playlists, tokens]);
+    }, [initializePlaylists, playlists, tokens])
 
     useEffect(() => {
         if (tokens && tokens.accessToken && !user) {
-            getUser({ accessToken: tokens.accessToken });
+            getUser({ accessToken: tokens.accessToken })
         }
-    }, [getUser, user, tokens]);
+    }, [getUser, user, tokens])
 
     const TokenRouting = () => {
         if (tokens) {
             if (tokens.accessToken) {
-                return null;
+                return null
             } else if (tokens.accessToken === null) {
-                return <Redirect to="/login" />;
+                return <Redirect to="/login" />
             }
         }
-        return null;
-    };
+        return null
+    }
 
     return (
         <React.Fragment>
@@ -121,8 +121,8 @@ const App = (props) => {
                 </Switch>
             </Router>
         </React.Fragment>
-    );
-};
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -131,16 +131,16 @@ const mapStateToProps = (state) => {
         recent: state.recent,
         albums: state.albums,
         user: state.user,
-    };
-};
+    }
+}
 
 const mapDispatchToProps = {
     setToken,
     getRecentAlbums,
     initializePlaylists,
     getUser,
-};
+}
 
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 
-export default ConnectedApp;
+export default ConnectedApp

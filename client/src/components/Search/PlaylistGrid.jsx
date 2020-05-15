@@ -1,11 +1,11 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import React from "react"
+import Grid from "@material-ui/core/Grid"
+import Box from "@material-ui/core/Box"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 const PlaylistGrid = (props) => {
-    const { classes, playlists } = props;
+    const { classes, playlists } = props
     return (
         <Grid container spacing={3} justify="center">
             {playlists.map((playlist) => (
@@ -38,7 +38,7 @@ const PlaylistGrid = (props) => {
                 </Grid>
             ))}
         </Grid>
-    );
-};
+    )
+}
 
-export default PlaylistGrid;
+export default PlaylistGrid

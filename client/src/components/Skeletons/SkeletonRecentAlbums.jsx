@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"
 
-import Grid from "@material-ui/core/Grid";
-import Skeleton from "@material-ui/lab/Skeleton";
+import Grid from "@material-ui/core/Grid"
+import Skeleton from "@material-ui/lab/Skeleton"
 
 const SkeletonRecentAlbums = () => {
     return (
@@ -45,7 +45,7 @@ const SkeletonRecentAlbums = () => {
                 </Grid>
             </Grid>
         </div>
-    );
-};
+    )
+}
 
-export default SkeletonRecentAlbums;
+export default SkeletonRecentAlbums

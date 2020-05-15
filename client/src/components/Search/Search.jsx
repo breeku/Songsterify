@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import TextField from "@material-ui/core/TextField"
+import { makeStyles } from "@material-ui/core/styles"
+import Paper from "@material-ui/core/Paper"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import Typography from "@material-ui/core/Typography"
+import Box from "@material-ui/core/Box"
 
-import AlbumGrid from "./AlbumGrid";
-import ArtistGrid from "./ArtistGrid";
-import PlaylistGrid from "./PlaylistGrid";
+import AlbumGrid from "./AlbumGrid"
+import ArtistGrid from "./ArtistGrid"
+import PlaylistGrid from "./PlaylistGrid"
 
-import { searchSpotify } from "../../reducers/searchReducer";
+import { searchSpotify } from "../../reducers/searchReducer"
 
 const useStyles = makeStyles((theme) => ({
     root: theme.root,
@@ -54,10 +54,10 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: "nowrap",
         pointerEvents: "none",
     },
-}));
+}))
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index, ...other } = props
 
     return (
         <Typography
@@ -70,34 +70,34 @@ function TabPanel(props) {
         >
             <Box p={3}>{children}</Box>
         </Typography>
-    );
+    )
 }
 
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
         "aria-controls": `simple-tabpanel-${index}`,
-    };
+    }
 }
 
 const Search = (props) => {
-    const { search, tokens, searchSpotify } = props;
-    const [formValue, setFormValue] = useState("");
-    const [tabValue, setTabValue] = useState(0);
-    const classes = useStyles();
+    const { search, tokens, searchSpotify } = props
+    const [formValue, setFormValue] = useState("")
+    const [tabValue, setTabValue] = useState(0)
+    const classes = useStyles()
 
     const formChange = (e) => {
-        setFormValue(e.target.value);
-    };
+        setFormValue(e.target.value)
+    }
 
     const tabChange = (e, newValue) => {
-        setTabValue(newValue);
-    };
+        setTabValue(newValue)
+    }
 
     const submitSearch = (e) => {
-        e.preventDefault();
-        searchSpotify({ value: formValue, accessToken: tokens.accessToken });
-    };
+        e.preventDefault()
+        searchSpotify({ value: formValue, accessToken: tokens.accessToken })
+    }
 
     return (
         <div className={classes.root}>
@@ -195,16 +195,16 @@ const Search = (props) => {
                 ) : null}
             </main>
         </div>
-    );
-};
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
         tokens: state.tokens,
         search: state.search,
-    };
-};
+    }
+}
 
-const ConnectedSearch = connect(mapStateToProps, { searchSpotify })(Search);
+const ConnectedSearch = connect(mapStateToProps, { searchSpotify })(Search)
 
-export default ConnectedSearch;
+export default ConnectedSearch
