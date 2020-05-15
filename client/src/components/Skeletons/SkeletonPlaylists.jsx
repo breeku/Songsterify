@@ -1,5 +1,5 @@
-import React from "react"
-import Skeleton from "@material-ui/lab/Skeleton"
+import React from "react";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const SkeletonPlaylists = () => {
     return (
@@ -10,7 +10,7 @@ const SkeletonPlaylists = () => {
                 height="calc(100vh - 170px)"
             />
         </React.Fragment>
-    )
-}
+    );
+};
 
-export default SkeletonPlaylists
+export default SkeletonPlaylists;
