@@ -9,19 +9,9 @@ import { Redirect } from "react-router-dom"
 import { connect } from "react-redux"
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: "flex",
-        backgroundImage: "linear-gradient(rgb(56, 64, 103), rgb(6, 9, 10) 85%)",
-        width: "100%",
-        height: "100vh",
-    },
+    root: theme.root,
     toolbar: theme.mixins.toolbar,
-    content: {
-        marginLeft: 300,
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        color: "whitesmoke",
-    },
+    content: theme.content,
 }))
 
 const Login = (props) => {

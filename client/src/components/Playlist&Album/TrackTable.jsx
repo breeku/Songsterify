@@ -11,6 +11,7 @@ import TableHead from "@material-ui/core/TableHead"
 import TableCell from "@material-ui/core/TableCell"
 import TableBody from "@material-ui/core/TableBody"
 import TableRow from "@material-ui/core/TableRow"
+import Paper from "@material-ui/core/Paper"
 import { withStyles } from "@material-ui/core/styles"
 
 import Tab from "./Tab/Tab"
@@ -19,6 +20,11 @@ const styles = (theme) => ({
     root: {
         marginTop: "1em",
         width: "100%",
+        overflowX: "auto",
+        backgroundColor: "transparent",
+    },
+    table: {
+        minWidth: 650,
     },
     text: {
         color: "whitesmoke",
@@ -86,7 +92,7 @@ const TrackTable = (props) => {
                 return classes.tabNotFound
             }
         } else {
-            return {}
+            return ""
         }
     }
 
@@ -100,8 +106,8 @@ const TrackTable = (props) => {
         setTab(null)
     }
     return (
-        <React.Fragment>
-            <Table className={classes.root}>
+        <Paper className={classes.root}>
+            <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
                         <TableCell className={classes.text}>#</TableCell>
@@ -225,7 +231,7 @@ const TrackTable = (props) => {
                     </DialogContent>
                 </Dialog>
             ) : null}
-        </React.Fragment>
+        </Paper>
     )
 }
 

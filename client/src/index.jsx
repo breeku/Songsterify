@@ -24,6 +24,7 @@ const theme = createMuiTheme({
         color: "whitesmoke",
         [breakpoints.down("xs")]: {
             marginLeft: 0,
+            padding: 0,
         },
     },
     aNoDecoration: {
