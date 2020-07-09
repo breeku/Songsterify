@@ -7,10 +7,11 @@ describe("Logged out", function () {
     })
 
     it("Prompts me to log in", function () {
-        cy.get("h1").should("contain", "Welcome to Songsterify")
+        cy.get("h2").should("contain", "Welcome to")
+        cy.get("h1").should("contain", "Songsterify!")
 
         cy.get(
-            "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-3.MuiGrid-justify-xs-center > div > a > span.MuiButton-label"
+            "main > div.MuiGrid-root.makeStyles-hero-30.MuiGrid-container > div:nth-child(1) > div > a"
         ).should("contain", "Login via Spotify")
     })
 

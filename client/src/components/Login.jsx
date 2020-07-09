@@ -1,12 +1,13 @@
 import React from "react"
-import Button from "@material-ui/core/Button"
 
-import Grid from "@material-ui/core/Grid"
 import { makeStyles } from "@material-ui/core/styles"
 
 import { Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
+
+import Hero from "./Hero/Hero"
+import Intro from "./Intro/Intro"
 
 const useStyles = makeStyles((theme) => ({
     root: theme.root,
@@ -32,21 +33,8 @@ const Login = (props) => {
                 <div className={classes.root}>
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
-                        <Grid container spacing={3} justify="center">
-                            <Grid item>
-                                <h1>Welcome to Songsterify!</h1>
-                                <p>
-                                    You will need to login to access the site.
-                                </p>
-                                <Button
-                                    href={authUrl}
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Login via Spotify
-                                </Button>
-                            </Grid>
-                        </Grid>
+                        <Hero authUrl={authUrl} />
+                        <Intro />
                     </main>
                 </div>
             )}
