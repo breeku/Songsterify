@@ -36,9 +36,10 @@ const Intro = (props) => {
                 <div className={classes.introduction}>
                     <h2>What is it?</h2>
                     <p>
-                        Songsterify helps you to find new songs to play! Browse
-                        your favourite playlists / albums and discover tabs that
-                        you did not know exist.
+                        Songsterify combines Songsterr and Spotify to make it
+                        easy to find new songs to play! Browse your favourite
+                        playlists / albums and discover tabs that you did not
+                        know exist.
                     </p>
                 </div>
             </Grid>
